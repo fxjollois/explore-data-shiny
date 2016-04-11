@@ -43,13 +43,39 @@ shinyServer(function(input, output, session) {
             sliderInput("quanti.arrondi", label = "Arrondi", min = 0, max = 5, value = 2)
         } else if (input$quanti.type == 1) {
             # Histogramme
-            sliderInput("quanti.bins", label = "Nombre de barres", min = 1, max = 50, value = 30)
+            list(
+                radioButtons("quanti.bins.type", "Choix de la répartition", c("Par nombre de bins" = 1, "Par largeur de bins" = 2, "Répartition personnalisée" = 3)),
+                uiOutput("quanti.bins.ui")
+            )
         } else if (input$quanti.type == 2) {
             # Boîte à moustache
         } else if (input$quanti.type == 3) {
             ## QQ-plot
         }
     })
+    output$quanti.bins.ui <- renderUI({
+        x = donnees()[,input$quanti.var]
+        if (is.null(input$quanti.bins.type)) return(NULL)
+        if (input$quanti.bins.type == 1) {
+            # Par nombre de bins
+            sliderInput("quanti.bins", label = "Nombre de barres", min = 1, max = 50, value = 10)            
+        } else if (input$quanti.bins.type == 2) {
+            # Par largeur de bins
+            sliderInput("quanti.bins", label = "Largeurs de barres", min = 1, max = max(x, na.rm = TRUE), value = 1)
+        } else if (input$quanti.bins.type == 3) {
+            # Répartition personnalisée
+            textInput("quanti.breaks", "Bornes des intervalles")
+        }
+    })
+    output$quanti.info <- renderDataTable({
+        x = donnees()[,input$quanti.var]
+        mat = rbind(
+            c("Nombre de valeurs", length(x)),
+            c("Nombre de valeurs manquantes", sum(is.na(x))),
+            c("Proportion de valeurs manquantes", sum(is.na(x)) / length(x))
+        )
+        setNames(data.frame(mat), c("Informations", ""))
+    }, options = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE))
     output$quanti.table <- renderDataTable({
         if (is.null(input$quanti.arrondi)) return(NULL)
         if (input$quanti.type == 0) {
@@ -67,10 +93,25 @@ shinyServer(function(input, output, session) {
             res = setNames(melt(round(res, input$quanti.arrondi)), c("Statistique", "Valeur"))
         }
     }, options = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE))
+    
     output$quanti.plot <- renderPlot({
         if (input$quanti.type == 1) {
             # Histogramme
-            ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(bins = input$quanti.bins)
+            if (is.null(input$quanti.bins.type)) return(NULL)
+            if (is.null(input$quanti.bins)) return(NULL)
+            if (input$quanti.bins.type == 1) {
+                # Par nombre de bins
+                ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(bins = input$quanti.bins)
+            } else if (input$quanti.bins.type == 2) {
+                # Par largeur de bins
+                ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(binwidth = input$quanti.bins)
+            } else if (input$quanti.bins.type == 3) {
+                # Répartition personnalisée
+                if (is.null(input$quanti.breaks)) return(NULL)
+                breaks = as.numeric(strsplit(input$quanti.breaks, ",")[[1]])
+                if (is.numeric(breaks) & length(breaks) > 1) 
+                    ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(y = ..density.., breaks = breaks)
+            }
         } else if (input$quanti.type == 2) {
             # Boîte à moustache
             ggplot(donnees(), aes_string(1, input$quanti.var)) + geom_boxplot() + xlab("") + ylab("")
@@ -79,7 +120,7 @@ shinyServer(function(input, output, session) {
             ggplot(donnees(), aes_string(sample = input$quanti.var)) + geom_qq()
         }
     })
-    
+
     #############################################
     # Qualitative
     output$quali.ui <- renderUI({ 
@@ -91,6 +132,15 @@ shinyServer(function(input, output, session) {
             )
         }
     })
+    output$quali.info <- renderDataTable({
+        x = donnees()[,input$quali.var]
+        mat = rbind(
+            c("Nombre de valeurs", length(x)),
+            c("Nombre de valeurs manquantes", sum(is.na(x))),
+            c("Proportion de valeurs manquantes", sum(is.na(x)) / length(x))
+        )
+        setNames(data.frame(mat), c("Informations", ""))
+    }, options = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE))
     output$quali.table <- renderDataTable({
         if (is.null(input$quali.arrondi)) return(NULL)
         if (input$quali.type == 0) {

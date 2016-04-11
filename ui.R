@@ -7,13 +7,14 @@ shinyUI(navbarPage(
     # Choix des données
     tabPanel(
         "Données",
+        h3("Choix des données"),
         p("Choississez le jeu de données que vous souhaitez analyser dans le menu ci-dessous. Vous verrez un aperçu de celui-ci dans la partie droite."),
         sidebarLayout(
             sidebarPanel(
                 selectInput(
                     "donnees.choix", 
-                    label = "Choix du jeu de données",
-                    choices = c("mtcars", "LifeCycleSavings", "iris")
+                    label = "Jeu de données",
+                    choices = c("mtcars", "LifeCycleSavings", "iris", "msleep (ggplot2)" = "msleep")
                     )
             ),
             mainPanel(
@@ -47,6 +48,7 @@ shinyUI(navbarPage(
                         uiOutput("quanti.ui")
                         ),
                     mainPanel(
+                        dataTableOutput("quanti.info"),
                         dataTableOutput("quanti.table"),
                         plotOutput("quanti.plot")
                         )
@@ -71,6 +73,7 @@ shinyUI(navbarPage(
                         uiOutput("quali.ui")
                     ),
                     mainPanel(
+                        dataTableOutput("quali.info"),
                         dataTableOutput("quali.table"),
                         plotOutput("quali.plot")
                     )
