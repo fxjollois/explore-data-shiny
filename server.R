@@ -110,7 +110,8 @@ shinyServer(function(input, output, session) {
                 if (is.null(input$quanti.breaks)) return(NULL)
                 breaks = as.numeric(strsplit(input$quanti.breaks, ",")[[1]])
                 if (is.numeric(breaks) & length(breaks) > 1) 
-                    ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(y = ..density.., breaks = breaks)
+                    if (max(breaks, na.rm = TRUE) > min(x, na.rm = TRUE) & min(breaks, na.rm = TRUE) < max(x, na.rm = TRUE))
+                        ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(aes(y = ..density..), breaks = breaks)
             }
         } else if (input$quanti.type == 2) {
             # Boîte à moustache
