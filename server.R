@@ -1,9 +1,11 @@
 library(shiny)
 library(reshape2)
 library(ggplot2)
+library(scales)
 
 shinyServer(function(input, output, session) {
     
+    #############################################
     # Choix des données
     donnees <- reactive({
         get(input$donnees.choix)
@@ -13,10 +15,27 @@ shinyServer(function(input, output, session) {
     })
     observe({
         don = donnees()
-        updateSelectInput(session, "quanti.var", choices = names(don)[unlist(lapply(don, is.numeric))])
-        updateSelectInput(session, "quali.var", choices = names(don))
+        nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
+        nom.quali = names(don)
+        
+        # univarié
+        updateSelectInput(session, "quanti.var", choices = nom.quanti)
+        updateSelectInput(session, "quali.var", choices = nom.quali)
+        
+        # quanti-quanti
+        updateSelectInput(session, "quantiquanti.var1", choices = nom.quanti)
+        updateSelectInput(session, "quantiquanti.var2", choices = nom.quanti)
+        
+        # quali-quali
+        updateSelectInput(session, "qualiquali.var1", choices = nom.quali)
+        updateSelectInput(session, "qualiquali.var2", choices = nom.quali)
+        
+        # quali-quanti
+        updateSelectInput(session, "qualiquanti.varQl", choices = names(don))
+        updateSelectInput(session, "qualiquanti.varQt", choices = nom.quanti)
     })
     
+    #############################################
     # Quantitative
     output$quanti.ui <- renderUI({ 
         if (input$quanti.type == 0) {
@@ -32,6 +51,7 @@ shinyServer(function(input, output, session) {
         }
     })
     output$quanti.table <- renderDataTable({
+        if (is.null(input$quanti.arrondi)) return(NULL)
         if (input$quanti.type == 0) {
             x = donnees()[,input$quanti.var]
             res = data.frame(
@@ -46,7 +66,7 @@ shinyServer(function(input, output, session) {
             )
             res = setNames(melt(round(res, input$quanti.arrondi)), c("Statistique", "Valeur"))
         }
-    }, options = list(paging = FALSE, searching = FALSE, ordering = FALSE))
+    }, options = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE))
     output$quanti.plot <- renderPlot({
         if (input$quanti.type == 1) {
             # Histogramme
@@ -60,6 +80,7 @@ shinyServer(function(input, output, session) {
         }
     })
     
+    #############################################
     # Qualitative
     output$quali.ui <- renderUI({ 
         if (input$quali.type == 0) {
@@ -71,6 +92,7 @@ shinyServer(function(input, output, session) {
         }
     })
     output$quali.table <- renderDataTable({
+        if (is.null(input$quali.arrondi)) return(NULL)
         if (input$quali.type == 0) {
             x = donnees()[,input$quali.var]
             t = table(x)
@@ -86,7 +108,7 @@ shinyServer(function(input, output, session) {
                 res$"Proportions cumulées" = round(as.vector(c) * 100, input$quali.arrondi)
             res
         }
-    }, options = list(paging = FALSE, searching = FALSE, ordering = FALSE))
+    }, options = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE))
     output$quali.plot <- renderPlot({
         df = data.frame(x = factor(donnees()[,input$quali.var]))
         if (input$quali.type == 1) {
@@ -94,7 +116,71 @@ shinyServer(function(input, output, session) {
             ggplot(df, aes(x, fill = x)) + geom_bar() + xlab("") + labs(fill = "")
         } else if (input$quali.type == 2) {
             # Diagramme circulaire
-            ggplot(df, aes(1, fill = x)) + geom_bar() + coord_polar(theta = "y") + xlab("") + ylab("") + labs(fill = "")
+            ggplot(df, aes("", fill = x)) + 
+                scale_y_continuous(labels = percent) +
+                geom_bar(aes(y = (..count..)/sum(..count..)), width = 1) + 
+                coord_polar(theta = "y") + 
+                xlab("") + ylab("") + labs(fill = input$quali.var) +
+                theme(axis.ticks = element_blank())
         }
     })
+
+    #############################################
+    # Quanti-Quanti
+    observe({
+        don = donnees()
+        bivar.quanti1 = input$quantiquanti.var1
+        nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
+        
+        updateSelectInput(session, "quantiquanti.var2", choices = nom.quanti[nom.quanti != bivar.quanti1])
+    })
+    output$quantiquanti.ui <- renderUI({
+        if (input$quantiquanti.type == 0) {
+            # Numérique
+            sliderInput("quantiquanti.arrondi", label = "Arrondi", min = 0, max = 5, value = 2)
+        }        
+    })
+    output$quantiquanti.table <- renderDataTable({
+        if (is.null(input$quantiquanti.arrondi)) return(NULL)
+        if (input$quantiquanti.type == 0) {
+            x = donnees()[,input$quantiquanti.var1]
+            y = donnees()[,input$quantiquanti.var2]
+            cov = cov(x, y, use = "complete")
+            cor = cor(x, y, use = "complete")
+            res = data.frame(
+                "Statistique" = c("Covariance", "Corrélation"),
+                "Valeur" = round(c(cov, cor), input$quantiquanti.arrondi)
+            )
+        }
+    }, options = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE))
+    output$quantiquanti.plot <- renderPlot({
+        if (input$quantiquanti.type == 1) {
+            # Nuage de points
+            ggplot(donnees()) + geom_point(aes_string(input$quantiquanti.var1, input$quantiquanti.var2))
+        } else if (input$quantiquanti.type == 2) {
+            # Heatmap
+            ggplot(donnees()) + geom_bin2d(aes_string(input$quantiquanti.var1, input$quantiquanti.var2))
+        }
+    })
+    
+    #############################################
+    # Quali-Quali
+    observe({
+        don = donnees()
+        bivar.quali1 = input$qualiquali.var1
+        nom.quali = names(don)
+        
+        updateSelectInput(session, "qualiquali.var2", choices = nom.quali[nom.quali != bivar.quali1])
+    })
+    
+    #############################################
+    # Quali-Quanti
+    observe({
+        don = donnees()
+        bivar.ql = input$qualiquanti.varQl
+        nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
+        
+        updateSelectInput(session, "qualiquanti.varQt", choices = nom.quanti[nom.quanti != bivar.ql])
+    })
+    
 })
