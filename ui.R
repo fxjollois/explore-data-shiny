@@ -111,6 +111,7 @@ shinyUI(navbarPage(
                         uiOutput("quantiquanti.ui")
                     ),
                     mainPanel(
+                        dataTableOutput("quantiquanti.info"),
                         dataTableOutput("quantiquanti.table"),
                         plotOutput("quantiquanti.plot")
                     )
