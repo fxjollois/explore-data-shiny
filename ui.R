@@ -14,7 +14,13 @@ shinyUI(navbarPage(
                 selectInput(
                     "donnees.choix", 
                     label = "Jeu de données",
-                    choices = c("mtcars", "LifeCycleSavings", "iris", "msleep (ggplot2)" = "msleep")
+                    choices = c("mtcars", 
+                                "LifeCycleSavings", 
+                                "iris", 
+                                "msleep (ggplot2)" = "msleep",
+                                "diamonds (ggplot2)" = "diamonds",
+                                "economics (ggplot2)" = "economics",
+                                "txhousing (ggplot2)" = "txhousing")
                     )
             ),
             mainPanel(
@@ -186,6 +192,10 @@ shinyUI(navbarPage(
         tabPanel(
             "Informations",
             includeMarkdown("README.md")
-            )
+        ),
+        tabPanel(
+            "Aide sur les données",
+            uiOutput("aide")
         )
+    )
 ))

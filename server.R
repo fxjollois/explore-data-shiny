@@ -2,6 +2,7 @@ library(shiny)
 library(reshape2)
 library(ggplot2)
 library(scales)
+library(httr)
 
 # Options pour l'affichage d'un DataTable très basique
 opt.DT.simple = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE)
@@ -45,6 +46,10 @@ shinyServer(function(input, output, session) {
         # quali-quanti
         updateSelectInput(session, "qualiquanti.varQl", choices = names(don))
         updateSelectInput(session, "qualiquanti.varQt", choices = nom.quanti)
+    })
+    
+    output$aide <- renderUI({
+        includeHTML(paste("aide/", input$donnees.choix, ".html", sep = ""))
     })
     
     #############################################
@@ -133,10 +138,13 @@ shinyServer(function(input, output, session) {
         } else if (input$quanti.type == 3) {
             ## QQ-plot
             x = donnees()[,input$quanti.var]
-            ggplot(donnees(), aes_string(sample = input$quanti.var)) + geom_qq() +
-                geom_abline(intercept = mean(x, na.rm = TRUE),
-                            slope = sd(x, na.rm = TRUE),
-                            col = "gray80")
+            xy = quantile(x, c(.25, .75), names = FALSE, type = 7, na.rm = TRUE)
+            xx = qnorm(c(.25, .75))
+            xslope = diff(xy)/diff(xx)
+            xint = xy[1] - xslope*xx[1]
+            ggplot(donnees(), aes_string(sample = input$quanti.var)) + 
+                geom_abline(intercept = xint, slope = xslope, col = "gray80") +
+                geom_qq()
         }
     })
 
