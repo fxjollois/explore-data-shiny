@@ -101,7 +101,7 @@ shinyServer(function(input, output, session) {
         mat = rbind(
             c("Nombre de valeurs", length(x)),
             c("Nombre de valeurs manquantes", sum(is.na(x))),
-            c("Proportion de valeurs manquantes", sum(is.na(x)) / length(x))
+            c("Proportion de valeurs manquantes", to.pct(sum(is.na(x)) / length(x)))
         )
         setNames(data.frame(mat), c("Informations", ""))
     }, options = opt.DT.simple)
@@ -179,7 +179,7 @@ shinyServer(function(input, output, session) {
         mat = rbind(
             c("Nombre de valeurs", length(x)),
             c("Nombre de valeurs manquantes", sum(is.na(x))),
-            c("Proportion de valeurs manquantes", sum(is.na(x)) / length(x))
+            c("Proportion de valeurs manquantes", to.pct(sum(is.na(x)) / length(x)))
         )
         setNames(data.frame(mat), c("Informations", ""))
     }, options = opt.DT.simple)
@@ -244,7 +244,7 @@ shinyServer(function(input, output, session) {
         mat = rbind(
             c("Nombre de valeurs", length(x)),
             c("Nombre de valeurs manquantes", sum(is.na(x+y))),
-            c("Proportion de valeurs manquantes", sum(is.na(x+y)) / length(x))
+            c("Proportion de valeurs manquantes", to.pct(sum(is.na(x+y)) / length(x)))
         )
         setNames(data.frame(mat), c("Informations", ""))
     }, options = opt.DT.simple)
