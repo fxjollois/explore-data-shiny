@@ -309,20 +309,21 @@ shinyServer(function(input, output, session) {
         tab = table(x, y)
         if (input$qualiquali.tab.type == 0) {
             # Occurences
-            as.data.frame.matrix(tab)
+            rendu = as.data.frame.matrix(tab)
         } else {
             if (is.null(input$qualiquali.tab.arrondi)) return(NULL)
             if (input$qualiquali.tab.type == 1) {
                 # Proportions
-                to.pct(as.data.frame.matrix(prop.table(tab)), input$qualiquali.tab.arrondi)
+                rendu = to.pct(as.data.frame.matrix(prop.table(tab)), input$qualiquali.tab.arrondi)
             } else if (input$qualiquali.tab.type == 2) {
                 # Profils ligne
-                to.pct(as.data.frame.matrix(prop.table(tab, margin = 1)), input$qualiquali.tab.arrondi)
+                rendu = to.pct(as.data.frame.matrix(prop.table(tab, margin = 1)), input$qualiquali.tab.arrondi)
             } else if (input$qualiquali.tab.type == 3) {
                 # Profils colonnes
-                to.pct(as.data.frame.matrix(prop.table(tab, margin = 2)), input$qualiquali.tab.arrondi)
+                rendu = to.pct(as.data.frame.matrix(prop.table(tab, margin = 2)), input$qualiquali.tab.arrondi)
             }
         }
+        cbind(" " = rownames(rendu), rendu)
     }, options = opt.DT.simple)
     output$qualiquali.plot <- renderPlot({
         if (input$qualiquali.type == 0) return(NULL)
