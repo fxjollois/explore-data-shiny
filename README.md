@@ -1,6 +1,6 @@
 # Explore Data
 
-Application web d'exploration de données, permettant de réaliser :
+Application web d'exploration de données permettant de réaliser :
 
 - des statistiques univariées
 - des statistiques bivariées
@@ -8,6 +8,8 @@ Application web d'exploration de données, permettant de réaliser :
 ## Informations
 
 Cette interface web est une application `Shiny`, nécessitant donc le logiciel R et le package `shiny`, ainsi que les packages `reshape2`, `ggplot2` et `scales`.
+
+Elle est écrite et maintenue par [FX Jollois](http://fxjollois.github.io), pour le département [STID](http://www.stid-paris.fr) de l'[IUT Paris Descartes](http://www.iut.parisdescartes.fr). Les fichiers sources sont disponbiles sur [Github](https://github.com/fxjollois/explore-data).
 
 ## Installation 
 

@@ -57,6 +57,9 @@ shinyServer(function(input, output, session) {
         # quali-quanti
         updateSelectInput(session, "qualiquanti.varQl", choices = names(don))
         updateSelectInput(session, "qualiquanti.varQt", choices = nom.quanti)
+        
+        # création de variables
+        updateSelectInput(session, "new.var", choices = nom.quanti)
     })
     
     output$aide <- renderUI({
@@ -418,4 +421,5 @@ shinyServer(function(input, output, session) {
                 labs(fill = input$qualiquanti.varQl)
         }
     })
+    
 })
