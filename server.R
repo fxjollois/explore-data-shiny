@@ -291,7 +291,7 @@ shinyServer(function(input, output, session) {
         } else if (input$qualiquali.type == 1) {
             # Diagramme en barres
             radioButtons("qualiquali.bar.type", "Type de diagramme",
-                         c("Empilées" = 0, "Empilées à 100%" = 1, "Séparées" = 2))
+                         c("Empilées en effectifs" = 0, "Empilées en fréquences" = 1, "Séparées en effectifs" = 2, "Séparées en fréquences" = 3))
         }
     })
     output$qualiquali.tab.ui <- renderUI({
@@ -341,6 +341,9 @@ shinyServer(function(input, output, session) {
                     scale_y_continuous(labels = percent)
             else if (input$qualiquali.bar.type == 2)
                 g = g + geom_bar(position = "dodge")
+            else if (input$qualiquali.bar.type == 3)
+                g = g + geom_bar(aes(y=..count../sum(..count..)), position = "dodge") +
+                    scale_y_continuous(labels = percent)
             g + xlab(input$qualiquali.var1) + ylab("") +
                 labs(fill = input$qualiquali.var2)
         } else if (input$qualiquali.type == 2) {
