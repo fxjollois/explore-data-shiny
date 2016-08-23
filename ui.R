@@ -179,6 +179,7 @@ shinyUI(navbarPage(
                     ),
                     mainPanel(
                         dataTableOutput("qualiquanti.table"),
+                        dataTableOutput("qualiquanti.tablebis"),
                         plotOutput("qualiquanti.plot")
                     )
                 )        

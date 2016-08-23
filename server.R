@@ -379,6 +379,18 @@ shinyServer(function(input, output, session) {
             "Maximum" = round(tapply(x, z, max, na.rm = TRUE), input$qualiquanti.arrondi)
         )
     }, options = opt.DT.simple)
+    output$qualiquanti.tablebis <- renderDataTable({
+        if (input$qualiquanti.type > 0) return(NULL)
+        if (is.null(input$qualiquanti.arrondi)) return(NULL)
+        x = donnees()[,input$qualiquanti.varQt]
+        z = factor(donnees()[,input$qualiquanti.varQl])
+        data.frame(
+            "Modalités" = levels(z),
+            "Q1" = round(tapply(x, z, quantile, na.rm = TRUE, .25), input$qualiquanti.arrondi),
+            "Médiane" = round(tapply(x, z, median, na.rm = TRUE), input$qualiquanti.arrondi),
+            "Q3" = round(tapply(x, z, quantile, na.rm = TRUE, .75), input$qualiquanti.arrondi)
+        )
+    }, options = opt.DT.simple)
     output$qualiquanti.plot <- renderPlot({
         if (input$qualiquanti.type == 0) return(NULL)    
         don = setNames(donnees()[,c(input$qualiquanti.varQl, input$qualiquanti.varQt)], c("z", "x"))
