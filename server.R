@@ -89,10 +89,13 @@ shinyServer(function(input, output, session) {
             sliderInput("quanti.bins", label = "Nombre de barres", min = 1, max = 50, value = 10)            
         } else if (input$quanti.bins.type == 2) {
             # Par largeur de bins
-            sliderInput("quanti.bins", label = "Largeurs de barres", min = 1, max = max(x, na.rm = TRUE), value = 1)
+            textInput("quanti.binwidth", label = "Largeurs de barres", value = ceiling(diff(range(x, na.rm = TRUE)) / 10))
         } else if (input$quanti.bins.type == 3) {
             # Répartition personnalisée
-            textInput("quanti.breaks", "Bornes des intervalles")
+            list(
+                helpText(paste("Rappel, l'étendue des données est : ", paste(range(x), collapse = ", "))),
+                textInput("quanti.breaks", "Bornes des intervalles")
+            )
         }
     })
     output$quanti.info <- renderDataTable({
@@ -131,7 +134,10 @@ shinyServer(function(input, output, session) {
                 ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(bins = input$quanti.bins)
             } else if (input$quanti.bins.type == 2) {
                 # Par largeur de bins
-                ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(binwidth = input$quanti.bins)
+                if (is.null(input$quanti.binwidth)) return(NULL)
+                binwidth = as.numeric(input$quanti.binwidth)
+                if (is.na(binwidth)) return(NULL)
+                ggplot(donnees(), aes_string(input$quanti.var)) + geom_histogram(binwidth = binwidth)
             } else if (input$quanti.bins.type == 3) {
                 # Répartition personnalisée
                 if (is.null(input$quanti.breaks)) return(NULL)
