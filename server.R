@@ -376,10 +376,9 @@ shinyServer(function(input, output, session) {
         z = factor(donnees()[,input$qualiquanti.varQl])
         data.frame(
             "Modalités" = levels(z),
+            "Effectifs" = tapply(x, z, length),
             "Moyenne" = round(tapply(x, z, mean, na.rm = TRUE), input$qualiquanti.arrondi),
-            "Ecart-Type" = round(tapply(x, z, sd, na.rm = TRUE), input$qualiquanti.arrondi),
-            "Minimum" = round(tapply(x, z, min, na.rm = TRUE), input$qualiquanti.arrondi),
-            "Maximum" = round(tapply(x, z, max, na.rm = TRUE), input$qualiquanti.arrondi)
+            "Ecart-Type" = round(tapply(x, z, sd, na.rm = TRUE), input$qualiquanti.arrondi)
         )
     }, options = opt.DT.simple)
     output$qualiquanti.tablebis <- renderDataTable({
@@ -389,9 +388,11 @@ shinyServer(function(input, output, session) {
         z = factor(donnees()[,input$qualiquanti.varQl])
         data.frame(
             "Modalités" = levels(z),
+            "Minimum" = round(tapply(x, z, min, na.rm = TRUE), input$qualiquanti.arrondi),
             "Q1" = round(tapply(x, z, quantile, na.rm = TRUE, .25), input$qualiquanti.arrondi),
             "Médiane" = round(tapply(x, z, median, na.rm = TRUE), input$qualiquanti.arrondi),
-            "Q3" = round(tapply(x, z, quantile, na.rm = TRUE, .75), input$qualiquanti.arrondi)
+            "Q3" = round(tapply(x, z, quantile, na.rm = TRUE, .75), input$qualiquanti.arrondi),
+            "Maximum" = round(tapply(x, z, max, na.rm = TRUE), input$qualiquanti.arrondi)
         )
     }, options = opt.DT.simple)
     output$qualiquanti.plot <- renderPlot({
@@ -400,7 +401,7 @@ shinyServer(function(input, output, session) {
         don$z = factor(don$z)
         if (input$qualiquanti.type == 1) {
             # Histogramme
-            ggplot(don) + geom_histogram(aes(x, fill=z)) +
+            ggplot(don) + geom_histogram(aes(x, ..density.., fill=z)) +
                 facet_grid(z~.) +
                 xlab(input$qualiquanti.varQt) +
                 labs(fill = input$qualiquanti.varQl)
