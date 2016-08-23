@@ -21,7 +21,9 @@ shinyUI(navbarPage(
                                 "diamonds (ggplot2)" = "diamonds",
                                 "economics (ggplot2)" = "economics",
                                 "txhousing (ggplot2)" = "txhousing")
-                    )
+                    ),
+                textOutput("donnees.nblignes"),
+                textOutput("donnees.nbcolonnes")
             ),
             mainPanel(
                 dataTableOutput("donnees.rendu")

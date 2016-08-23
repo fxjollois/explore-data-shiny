@@ -24,10 +24,21 @@ shinyServer(function(input, output, session) {
         get(input$donnees.choix)
     })
     output$donnees.rendu <- renderDataTable({
-        donnees()
+        don = donnees()
+        cbind(" " = rownames(don), don)
     })
+    output$donnees.nblignes <- renderText({
+        don = donnees()
+        paste("Nombre de lignes : ", nrow(don))
+    })
+    output$donnees.nbcolonnes <- renderText({
+        don = donnees()
+        paste("Nombre de colonnes : ", ncol(don))
+    })
+    
     observe({
         don = donnees()
+        
         nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
         nom.quali = names(don)
         
