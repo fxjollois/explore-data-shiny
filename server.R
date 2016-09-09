@@ -33,6 +33,7 @@ shinyServer(function(input, output, session) {
                     input$donnees.fichier.input$datapath, 
                     header = input$donnees.fichier.header == "oui", 
                     sep = input$donnees.fichier.sep,
+                    dec = input$donnees.fichier.dec,
                     stringsAsFactors = FALSE)
             }, silent = TRUE)
             don
@@ -56,6 +57,9 @@ shinyServer(function(input, output, session) {
                                "virgule" = ",", 
                                "espace" = " ", 
                                "tabulation" = "\t")),
+                radioButtons("donnees.fichier.dec", 
+                             "Séparateur de décimales",
+                             c("point" = ".", "virgule" = ",")),
                 uiOutput("donnees.fichier.ok")
             )
         }
@@ -120,14 +124,20 @@ shinyServer(function(input, output, session) {
         if (is.null(don)) return(NULL)
         
         res = data.frame(
+            check.names = FALSE,
             "Variable" = names(don),
             "Type" = unlist(lapply(don, class)),
             "Nombre de valeurs distinctes" = unlist(lapply(don, function (v) { return (length(unique(v))) })),
-            "Premières valeurs" = unlist(lapply(don, function(v) { 
-                    if (length(v) > 10)
-                        return(paste(paste(v[1:10], collapse = " "), "..."))
+            "Valeurs" = unlist(lapply(don, function(v) { 
+                    if (is.factor(v) | is.character(v)) {
+                        vv = levels(factor(v))
+                    } else {
+                        vv = v
+                    }
+                    if (length(vv) > 10)
+                        return(paste(paste(vv[1:10], collapse = " "), "..."))
                     else
-                        return(paste(v, collapse = " "))
+                        return(paste(vv, collapse = " "))
                 }))
         )
         res
@@ -538,6 +548,7 @@ shinyServer(function(input, output, session) {
         x = donnees()[,input$qualiquanti.varQt]
         z = factor(donnees()[,input$qualiquanti.varQl])
         data.frame(
+            check.names = FALSE,
             "Modalités" = levels(z),
             "Effectifs" = tapply(x, z, length),
             "Moyenne" = round(tapply(x, z, mean, na.rm = TRUE), input$qualiquanti.arrondi),

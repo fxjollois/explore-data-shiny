@@ -14,6 +14,7 @@ shinyUI(navbarPage(
                 selectInput(
                     "donnees.choix", 
                     label = "Jeu de données",
+                    selectize = TRUE,
                     choices = c("mtcars", 
                                 "LifeCycleSavings", 
                                 "iris", 
@@ -28,7 +29,8 @@ shinyUI(navbarPage(
                 textOutput("donnees.nbcolonnes")
             ),
             mainPanel(
-                dataTableOutput("donnees.rendu")
+                dataTableOutput("donnees.rendu"),
+                style = "overflow: scroll;"
             )
         )
     ),
@@ -37,7 +39,8 @@ shinyUI(navbarPage(
     # Description des variables
     tabPanel(
         "Variables",
-        dataTableOutput("variables")
+        dataTableOutput("variables"),
+        style = "overflow: scroll;"
     ),
 
     #############################################
@@ -56,7 +59,8 @@ shinyUI(navbarPage(
                 textOutput("restrict.nblignes")
             ),
             mainPanel(
-                dataTableOutput("donnees.restrict")
+                dataTableOutput("donnees.restrict"),
+                style = "overflow: scroll;"
             )
         )
     ),
@@ -88,7 +92,8 @@ shinyUI(navbarPage(
                     mainPanel(
                         dataTableOutput("quanti.info"),
                         dataTableOutput("quanti.table"),
-                        plotOutput("quanti.plot")
+                        plotOutput("quanti.plot"),
+                        style = "overflow: scroll;"
                         )
                     )
                 ),
@@ -113,7 +118,8 @@ shinyUI(navbarPage(
                     mainPanel(
                         dataTableOutput("quali.info"),
                         dataTableOutput("quali.table"),
-                        plotOutput("quali.plot")
+                        plotOutput("quali.plot"),
+                        style = "overflow: scroll;"
                     )
                 )
             )
@@ -151,7 +157,8 @@ shinyUI(navbarPage(
                     mainPanel(
                         dataTableOutput("quantiquanti.info"),
                         dataTableOutput("quantiquanti.table"),
-                        plotOutput("quantiquanti.plot")
+                        plotOutput("quantiquanti.plot"),
+                        style = "overflow: scroll;"
                     )
                 )
             ),
@@ -180,7 +187,8 @@ shinyUI(navbarPage(
                     ),
                     mainPanel(
                         dataTableOutput("qualiquali.table"),
-                        plotOutput("qualiquali.plot")
+                        plotOutput("qualiquali.plot"),
+                        style = "overflow: scroll;"
                     )
                 )
             ),
@@ -210,7 +218,8 @@ shinyUI(navbarPage(
                     mainPanel(
                         dataTableOutput("qualiquanti.table"),
                         dataTableOutput("qualiquanti.tablebis"),
-                        plotOutput("qualiquanti.plot")
+                        plotOutput("qualiquanti.plot"),
+                        style = "overflow: scroll;"
                     )
                 )        
             )
