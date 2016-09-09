@@ -34,6 +34,13 @@ shinyUI(navbarPage(
     ),
     
     #############################################
+    # Description des variables
+    tabPanel(
+        "Variables",
+        dataTableOutput("variables")
+    ),
+
+    #############################################
     # Choix des données
     tabPanel(
         "Sous-population",

@@ -114,6 +114,26 @@ shinyServer(function(input, output, session) {
     })
 
     #############################################
+    # Description des variables
+    output$variables <- renderDataTable({
+        don = donnees()
+        if (is.null(don)) return(NULL)
+        
+        res = data.frame(
+            "Variable" = names(don),
+            "Type" = unlist(lapply(don, class)),
+            "Nombre de valeurs distinctes" = unlist(lapply(don, function (v) { return (length(unique(v))) })),
+            "Premières valeurs" = unlist(lapply(don, function(v) { 
+                    if (length(v) > 10)
+                        return(paste(paste(v[1:10], collapse = " "), "..."))
+                    else
+                        return(paste(v, collapse = " "))
+                }))
+        )
+        res
+    }, options = opt.DT.simple)
+
+    #############################################
     # Sous-populations
     
     donnees <- reactive({
