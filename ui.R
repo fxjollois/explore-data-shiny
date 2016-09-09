@@ -32,6 +32,17 @@ shinyUI(navbarPage(
     ),
     
     #############################################
+    # Choix des données
+    tabPanel(
+        "Sous-population",
+        h3("Choix d'une sous-population"),
+        p("Vous pouvez indiquer ici des critères de sélection d'une sous-population des données"),
+        textInput("restrict", label = "Condition(s)", width = "100%"),
+        textOutput("restrict.ok"),
+        dataTableOutput("donnees.restrict")
+    ),
+    
+    #############################################
     # Description univariée
     tabPanel(
         "Univarié",
@@ -51,7 +62,7 @@ shinyUI(navbarPage(
                         selectInput(
                             "quanti.type", 
                             label = "Représentation", 
-                            choices = c("Numérique" = 0, "Histogramme" = 1, "Boîte à moustache" = 2, "QQ plot" = 3)
+                            choices = c("Numérique" = 0, "Histogramme" = 1, "Boîte à moustache" = 2, "QQ plot" = 3, "Fréquences cumulées" = 4, "Courbe cumulée" = 5)
                             ),
                         uiOutput("quanti.ui")
                         ),
@@ -173,7 +184,7 @@ shinyUI(navbarPage(
                         selectInput(
                             "qualiquanti.type", 
                             label = "Représentation", 
-                            choices = c("Numérique" = 0, "Histogramme" = 1, "Boîtes à moustaches" = 2)
+                            choices = c("Numérique" = 0, "Histogramme" = 1, "Boîtes à moustaches" = 2, "Fréquences cumulées" = 3)
                         ),
                         uiOutput("qualiquanti.ui")
                     ),

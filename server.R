@@ -20,24 +20,24 @@ shinyServer(function(input, output, session) {
     
     #############################################
     # Choix des données
-    donnees <- reactive({
+    donnees.originales <- reactive({
         get(input$donnees.choix)
     })
     output$donnees.rendu <- renderDataTable({
-        don = donnees()
+        don = donnees.originales()
         cbind(" " = rownames(don), don)
     })
     output$donnees.nblignes <- renderText({
-        don = donnees()
+        don = donnees.originales()
         paste("Nombre de lignes : ", nrow(don))
     })
     output$donnees.nbcolonnes <- renderText({
-        don = donnees()
+        don = donnees.originales()
         paste("Nombre de colonnes : ", ncol(don))
     })
     
     observe({
-        don = donnees()
+        don = donnees.originales()
         
         nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
         nom.quali = names(don)
@@ -65,6 +65,29 @@ shinyServer(function(input, output, session) {
     output$aide <- renderUI({
         includeHTML(paste("aide/", input$donnees.choix, ".html", sep = ""))
     })
+
+    #############################################
+    # Sous-populations
+    
+    donnees <- reactive({
+        don = donnees.originales()
+        don2 = NULL
+        try({
+            don2 = eval(parse(text = paste("subset(don, subset =", input$restrict, ")")))
+        }, silent = TRUE)
+        don2
+    })
+    output$restrict.ok <- renderText({
+        don = donnees()
+        if (is.null(don))
+            "Vos critères de resrtriction sont incompatibles avec les données"
+        else
+            "Critères compatibles"
+    })
+    output$donnees.restrict <- renderDataTable({
+        don = donnees()
+        cbind(" " = rownames(don), don)
+    })
     
     #############################################
     # Quantitative
@@ -82,7 +105,15 @@ shinyServer(function(input, output, session) {
             # Boîte à moustache
         } else if (input$quanti.type == 3) {
             ## QQ-plot
-        }
+        } else if (input$quanti.type == 4) {
+            ## Fréquences cumulées
+        } else if (input$quanti.type == 5) {
+            ## Courbe cumulée
+            list(
+                radioButtons("quanti.courbe.bins.type", "Choix de la répartition", c("Par nombre de bins" = 1, "Par largeur de bins" = 2, "Répartition personnalisée" = 3)),
+                uiOutput("quanti.courbe.bins.ui")
+            )
+        } 
     })
     output$quanti.bins.ui <- renderUI({
         x = donnees()[,input$quanti.var]
@@ -98,6 +129,23 @@ shinyServer(function(input, output, session) {
             list(
                 helpText(paste("Rappel, l'étendue des données est : ", paste(range(x), collapse = ", "))),
                 textInput("quanti.breaks", "Bornes des intervalles")
+            )
+        }
+    })
+    output$quanti.courbe.bins.ui <- renderUI({
+        x = donnees()[,input$quanti.var]
+        if (is.null(input$quanti.courbe.bins.type)) return(NULL)
+        if (input$quanti.courbe.bins.type == 1) {
+            # Par nombre de bins
+            sliderInput("quanti.courbe.bins", label = "Nombre de barres", min = 1, max = 50, value = 10)            
+        } else if (input$quanti.courbe.bins.type == 2) {
+            # Par largeur de bins
+            textInput("quanti.courbe.binwidth", label = "Largeurs de barres", value = ceiling(diff(range(x, na.rm = TRUE)) / 10))
+        } else if (input$quanti.courbe.bins.type == 3) {
+            # Répartition personnalisée
+            list(
+                helpText(paste("Rappel, l'étendue des données est : ", paste(range(x), collapse = ", "))),
+                textInput("quanti.courbe.breaks", "Bornes des intervalles")
             )
         }
     })
@@ -125,7 +173,8 @@ shinyServer(function(input, output, session) {
             "Q3" = quantile(x, .75, na.rm = TRUE),
             "Maximum" = max(x, na.rm = TRUE)
         )
-        res = setNames(melt(round(res, input$quanti.arrondi)), c("Statistique", "Valeur"))
+        # res = setNames(melt(round(res, input$quanti.arrondi)), c("Statistique", "Valeur"))
+        res
     }, options = opt.DT.simple)
     output$quanti.plot <- renderPlot({
         if (input$quanti.type == 1) {
@@ -165,6 +214,39 @@ shinyServer(function(input, output, session) {
             ggplot(donnees(), aes_string(sample = input$quanti.var)) + 
                 geom_abline(intercept = xint, slope = xslope, col = "gray80") +
                 geom_qq()
+        } else if (input$quanti.type == 4) {
+            ## Fréquences cumulées
+            ggplot(donnees(), aes_string(input$quanti.var)) + stat_ecdf() + xlab("") + ylab("")
+        } else if (input$quanti.type == 5) {
+            ## Courbes cumulées
+            if (is.null(input$quanti.courbe.bins.type)) return(NULL)
+            if (is.null(input$quanti.courbe.bins)) return(NULL)
+            if (input$quanti.courbe.bins.type == 1) {
+                # Par nombre de bins
+                ggplot(donnees(), aes_string(input$quanti.var)) + 
+                    stat_bin(aes(y=cumsum(..count..)), bins = input$quanti.courbe.bins, geom = "line") +
+                    ylab("")
+            } else if (input$quanti.courbe.bins.type == 2) {
+                # Par largeur de bins
+                if (is.null(input$quanti.courbe.binwidth)) return(NULL)
+                binwidth = as.numeric(input$quanti.courbe.binwidth)
+                if (is.na(binwidth)) return(NULL)
+                ggplot(donnees(), aes_string(input$quanti.var)) + 
+                    stat_bin(aes(y=cumsum(..count..)), binwidth = binwidth, geom = "line") +
+                    ylab("")
+            } else if (input$quanti.courbe.bins.type == 3) {
+                # Répartition personnalisée
+                if (is.null(input$quanti.courbe.breaks)) return(NULL)
+                breaks = as.numeric(strsplit(input$quanti.courbe.breaks, ",")[[1]])
+                x = donnees()[,input$quanti.var]
+                xmin = min(x, na.rm = TRUE)
+                xmax = max(x, na.rm = TRUE)
+                if (is.numeric(breaks) & length(breaks) > 1) 
+                    if (max(breaks, na.rm = TRUE) > xmin & min(breaks, na.rm = TRUE) < xmax)
+                        ggplot(donnees(), aes_string(input$quanti.var)) + 
+                            stat_bin(aes(y = cumsum(..density..)), breaks = breaks, geom = "line") +
+                            ylab("")
+            }
         }
     })
 
@@ -419,6 +501,12 @@ shinyServer(function(input, output, session) {
             ggplot(don) + geom_boxplot(aes(z, x, fill=z)) +
                 ylab(input$qualiquanti.varQt) + xlab("") +
                 labs(fill = input$qualiquanti.varQl)
+        } else if (input$qualiquanti.type == 3) {
+            # Fréquences cumulées
+            ggplot(don, aes(x, color=z)) + stat_ecdf() +
+                xlab(input$qualiquanti.varQt) +
+                ylab("") +
+                labs(color = input$qualiquanti.varQl)
         }
     })
     
