@@ -77,12 +77,12 @@ shinyServer(function(input, output, session) {
         }, silent = TRUE)
         don2
     })
-    output$restrict.ok <- renderText({
+    output$restrict.ok <- renderUI({
         don = donnees()
         if (is.null(don))
-            "Vos critères de resrtriction sont incompatibles avec les données"
+            p(class="bg-danger", "Vos critères de resrtriction sont incompatibles avec les données")
         else
-            "Critères compatibles"
+            p(class="bg-success", "Critères compatibles")
     })
     output$donnees.restrict <- renderDataTable({
         don = donnees()

@@ -37,9 +37,15 @@ shinyUI(navbarPage(
         "Sous-population",
         h3("Choix d'une sous-population"),
         p("Vous pouvez indiquer ici des critères de sélection d'une sous-population des données"),
-        textInput("restrict", label = "Condition(s)", width = "100%"),
-        textOutput("restrict.ok"),
-        dataTableOutput("donnees.restrict")
+        sidebarLayout(
+            sidebarPanel(
+                textInput("restrict", label = "Condition(s)", width = "100%"),
+                htmlOutput("restrict.ok")
+            ),
+            mainPanel(
+                dataTableOutput("donnees.restrict")
+            )
+        )
     ),
     
     #############################################
