@@ -21,49 +21,96 @@ shinyServer(function(input, output, session) {
     #############################################
     # Choix des données
     donnees.originales <- reactive({
-        get(input$donnees.choix)
+        if (input$donnees.choix != "fichier") {
+            # Données internes
+            get(input$donnees.choix)
+        } else {
+            # Données à charger
+            if (is.null(input$donnees.fichier.input)) return (NULL)
+            don = NULL
+            try({
+                don = read.table(
+                    input$donnees.fichier.input$datapath, 
+                    header = input$donnees.fichier.header == "oui", 
+                    sep = input$donnees.fichier.sep,
+                    stringsAsFactors = FALSE)
+            }, silent = TRUE)
+            don
+        }
+    })
+    output$donnees.fichier.ok <- renderUI({
+        don = donnees()
+        if (is.null(don) & !is.null(input$donnees.fichier.input))
+            p(class = "bg-danger", "Impossible de charger le fichier")
+    })
+    output$donnees.fichier.ui <- renderUI({
+        if (input$donnees.choix == "fichier") {
+            list(
+                fileInput("donnees.fichier.input", "Fichier"),
+                radioButtons("donnees.fichier.header", 
+                             "Noms de variables",
+                             c("oui", "non")),
+                radioButtons("donnees.fichier.sep", 
+                             "Séparateur", 
+                             c("point-virgule" = ";", 
+                               "virgule" = ",", 
+                               "espace" = " ", 
+                               "tabulation" = "\t")),
+                uiOutput("donnees.fichier.ok")
+            )
+        }
     })
     output$donnees.rendu <- renderDataTable({
         don = donnees.originales()
-        cbind(" " = rownames(don), don)
+        if (!is.null(don))
+            cbind(" " = rownames(don), don)
     })
     output$donnees.nblignes <- renderText({
         don = donnees.originales()
-        paste("Nombre de lignes : ", nrow(don))
+        if (!is.null(don))
+            paste("Nombre de lignes : ", nrow(don))
     })
     output$donnees.nbcolonnes <- renderText({
         don = donnees.originales()
-        paste("Nombre de colonnes : ", ncol(don))
+        if (!is.null(don))
+            paste("Nombre de colonnes : ", ncol(don))
     })
     
     observe({
         don = donnees.originales()
         
-        nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
-        nom.quali = names(don)
+        if (!is.null(don)) {
         
-        # univarié
-        updateSelectInput(session, "quanti.var", choices = nom.quanti)
-        updateSelectInput(session, "quali.var", choices = nom.quali)
-        
-        # quanti-quanti
-        updateSelectInput(session, "quantiquanti.var1", choices = nom.quanti)
-        updateSelectInput(session, "quantiquanti.var2", choices = nom.quanti)
-        
-        # quali-quali
-        updateSelectInput(session, "qualiquali.var1", choices = nom.quali)
-        updateSelectInput(session, "qualiquali.var2", choices = nom.quali)
-        
-        # quali-quanti
-        updateSelectInput(session, "qualiquanti.varQl", choices = names(don))
-        updateSelectInput(session, "qualiquanti.varQt", choices = nom.quanti)
-        
-        # création de variables
-        updateSelectInput(session, "new.var", choices = nom.quanti)
+            nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
+            nom.quali = names(don)
+            
+            # univarié
+            updateSelectInput(session, "quanti.var", choices = nom.quanti)
+            updateSelectInput(session, "quali.var", choices = nom.quali)
+            
+            # quanti-quanti
+            updateSelectInput(session, "quantiquanti.var1", choices = nom.quanti)
+            updateSelectInput(session, "quantiquanti.var2", choices = nom.quanti)
+            
+            # quali-quali
+            updateSelectInput(session, "qualiquali.var1", choices = nom.quali)
+            updateSelectInput(session, "qualiquali.var2", choices = nom.quali)
+            
+            # quali-quanti
+            updateSelectInput(session, "qualiquanti.varQl", choices = names(don))
+            updateSelectInput(session, "qualiquanti.varQt", choices = nom.quanti)
+            
+            # création de variables
+            updateSelectInput(session, "new.var", choices = nom.quanti)
+        }
     })
     
     output$aide <- renderUI({
-        includeHTML(paste("aide/", input$donnees.choix, ".html", sep = ""))
+        if (input$donnees.choix != "fichier") {
+            includeHTML(paste("aide/", input$donnees.choix, ".html", sep = ""))
+        } else {
+            p("Aucune aide à afficher (données externes)")
+        }
     })
 
     #############################################
@@ -88,9 +135,14 @@ shinyServer(function(input, output, session) {
         don = donnees()
         cbind(" " = rownames(don), don)
     })
-    
+    output$restrict.nblignes <- renderText({
+        don = donnees()
+        paste("Nombre de lignes : ", nrow(don))
+    })
+
     #############################################
     # Quantitative
+    
     output$quanti.ui <- renderUI({ 
         if (input$quanti.type == 0) {
             # Numérique
@@ -173,7 +225,7 @@ shinyServer(function(input, output, session) {
             "Q3" = quantile(x, .75, na.rm = TRUE),
             "Maximum" = max(x, na.rm = TRUE)
         )
-        # res = setNames(melt(round(res, input$quanti.arrondi)), c("Statistique", "Valeur"))
+        res = setNames(melt(round(res, input$quanti.arrondi)), c("Statistique", "Valeur"))
         res
     }, options = opt.DT.simple)
     output$quanti.plot <- renderPlot({

@@ -20,8 +20,10 @@ shinyUI(navbarPage(
                                 "msleep (ggplot2)" = "msleep",
                                 "diamonds (ggplot2)" = "diamonds",
                                 "economics (ggplot2)" = "economics",
-                                "txhousing (ggplot2)" = "txhousing")
+                                "txhousing (ggplot2)" = "txhousing",
+                                "Fichier à charger" = "fichier")
                     ),
+                uiOutput("donnees.fichier.ui"),
                 textOutput("donnees.nblignes"),
                 textOutput("donnees.nbcolonnes")
             ),
@@ -39,8 +41,12 @@ shinyUI(navbarPage(
         p("Vous pouvez indiquer ici des critères de sélection d'une sous-population des données"),
         sidebarLayout(
             sidebarPanel(
-                textInput("restrict", label = "Condition(s)", width = "100%"),
-                htmlOutput("restrict.ok")
+                textInput("restrict", 
+                          label = "Condition(s)", 
+                          width = "100%",
+                          placeholder = "écrire vos critères ici"),
+                htmlOutput("restrict.ok"),
+                textOutput("restrict.nblignes")
             ),
             mainPanel(
                 dataTableOutput("donnees.restrict")
