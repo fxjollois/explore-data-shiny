@@ -346,7 +346,7 @@ shinyServer(function(input, output, session) {
             )
         } else if (input$quali.type == 1) {
             # Diagramme en barres
-            radioButtons("quali.bar.type", label = "Représentation", choices = c("Occurences" = 1, "Proportions" = 2))
+            radioButtons("quali.bar.type", label = "Représentation", choices = c("Effectifs" = 1, "Proportions" = 2))
         }
     })
     output$quali.info <- renderDataTable({
@@ -369,7 +369,7 @@ shinyServer(function(input, output, session) {
         c = cumsum(p)
         res = data.frame(
             "Modalité" = m,
-            "Occurences" = as.vector(t),
+            "Effectifs" = as.vector(t),
             "Proportions" = round(as.vector(p) * 100, input$quali.arrondi)
         )
         if (input$quali.cum == 1)
@@ -383,7 +383,7 @@ shinyServer(function(input, output, session) {
             # Diagramme en barres
             if (input$quali.bar.type == 1)
                 ggplot(df, aes(x, fill = x)) + geom_bar() + 
-                    xlab("") + ylab("occurences") + labs(fill = "")
+                    xlab("") + ylab("Effectifs") + labs(fill = "")
             else
                 ggplot(df, aes(x, fill = x)) + geom_bar(aes(y = (..count..)/sum(..count..))) + 
                     xlab("") + ylab("proportions") + labs(fill = "") + scale_y_continuous(labels = percent)
@@ -461,7 +461,7 @@ shinyServer(function(input, output, session) {
             # Numérique
             list(
                 radioButtons("qualiquali.tab.type", "Type de tableau",
-                             c("Occurences" = 0, "Proportions" = 1, "Profils ligne" = 2, "Profils colonne" = 3)),
+                             c("Effectifs" = 0, "Proportions" = 1, "Profils ligne" = 2, "Profils colonne" = 3)),
                 uiOutput("qualiquali.tab.ui")
             )
         } else if (input$qualiquali.type == 1) {
@@ -484,7 +484,7 @@ shinyServer(function(input, output, session) {
         levels(y) = paste(input$qualiquali.var2, levels(y), sep = "=")
         tab = table(x, y)
         if (input$qualiquali.tab.type == 0) {
-            # Occurences
+            # Effectifs
             rendu = as.data.frame.matrix(tab)
         } else {
             if (is.null(input$qualiquali.tab.arrondi)) return(NULL)
