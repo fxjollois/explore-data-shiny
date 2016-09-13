@@ -493,10 +493,14 @@ shinyServer(function(input, output, session) {
                 rendu = to.pct(as.data.frame.matrix(prop.table(tab)), input$qualiquali.tab.arrondi)
             } else if (input$qualiquali.tab.type == 2) {
                 # Profils ligne
-                rendu = to.pct(as.data.frame.matrix(prop.table(tab, margin = 1)), input$qualiquali.tab.arrondi)
+                tabprop = as.data.frame.matrix(prop.table(tab, margin = 1))
+                tabprop$Total = apply(tabprop, 1, sum)
+                rendu = to.pct(tabprop, input$qualiquali.tab.arrondi)
             } else if (input$qualiquali.tab.type == 3) {
                 # Profils colonnes
-                rendu = to.pct(as.data.frame.matrix(prop.table(tab, margin = 2)), input$qualiquali.tab.arrondi)
+                tabprop = as.data.frame.matrix(prop.table(tab, margin = 2))
+                tabprop["Total",] = apply(tabprop, 2, sum)
+                rendu = to.pct(tabprop, input$qualiquali.tab.arrondi)
             }
         }
         cbind(" " = rownames(rendu), rendu)
