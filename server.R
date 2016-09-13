@@ -552,7 +552,7 @@ shinyServer(function(input, output, session) {
         z = factor(donnees()[,input$qualiquanti.varQl])
         data.frame(
             check.names = FALSE,
-            "Modalités" = levels(z),
+            "Modalités" = paste(input$qualiquanti.varQl, levels(z), sep = "="),
             "Effectifs" = tapply(x, z, length),
             "Moyenne" = round(tapply(x, z, mean, na.rm = TRUE), input$qualiquanti.arrondi),
             "Ecart-Type" = round(tapply(x, z, sd, na.rm = TRUE), input$qualiquanti.arrondi)
@@ -564,7 +564,7 @@ shinyServer(function(input, output, session) {
         x = donnees()[,input$qualiquanti.varQt]
         z = factor(donnees()[,input$qualiquanti.varQl])
         data.frame(
-            "Modalités" = levels(z),
+            "Modalités" = paste(input$qualiquanti.varQl, levels(z), sep = "="),
             "Minimum" = round(tapply(x, z, min, na.rm = TRUE), input$qualiquanti.arrondi),
             "Q1" = round(tapply(x, z, quantile, na.rm = TRUE, .25), input$qualiquanti.arrondi),
             "Médiane" = round(tapply(x, z, median, na.rm = TRUE), input$qualiquanti.arrondi),
