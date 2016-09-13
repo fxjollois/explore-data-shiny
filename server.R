@@ -4,6 +4,9 @@ library(ggplot2)
 library(scales)
 library(httr)
 
+# Chargement de Recensement85
+recensement85 = read.table("Recensement85.csv", sep = ",", header = T)
+
 # Options pour l'affichage d'un DataTable très basique
 opt.DT.simple = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE)
 

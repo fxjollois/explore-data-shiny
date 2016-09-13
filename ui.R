@@ -16,6 +16,7 @@ shinyUI(navbarPage(
                     label = "Jeu de données",
                     selectize = TRUE,
                     choices = c("mtcars", 
+                                "Recensement 85" = "recensement85",
                                 "LifeCycleSavings", 
                                 "iris", 
                                 "msleep (ggplot2)" = "msleep",
