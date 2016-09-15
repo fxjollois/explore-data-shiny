@@ -196,6 +196,7 @@ shinyServer(function(input, output, session) {
             ## Courbe cumulée
             list(
                 radioButtons("quanti.courbe.bins.type", "Choix de la répartition", c("Par nombre de bins" = 1, "Par largeur de bins" = 2, "Répartition personnalisée" = 3)),
+                checkboxInput("quanti.courbe.hist", "Histogramme empilé"),
                 uiOutput("quanti.courbe.bins.ui")
             )
         } 
@@ -308,30 +309,40 @@ shinyServer(function(input, output, session) {
             if (is.null(input$quanti.courbe.bins)) return(NULL)
             if (input$quanti.courbe.bins.type == 1) {
                 # Par nombre de bins
-                ggplot(donnees(), aes_string(input$quanti.var)) + 
-                    stat_bin(aes(y=cumsum(..count..)), bins = input$quanti.courbe.bins, geom = "line") +
-                    ylab("")
+                temp = print(ggplot(donnees(), aes_string(input$quanti.var)) + 
+                                 stat_bin(aes(y=cumsum(..count..)), bins = input$quanti.courbe.bins))
             } else if (input$quanti.courbe.bins.type == 2) {
                 # Par largeur de bins
                 if (is.null(input$quanti.courbe.binwidth)) return(NULL)
                 binwidth = as.numeric(input$quanti.courbe.binwidth)
                 if (is.na(binwidth)) return(NULL)
-                ggplot(donnees(), aes_string(input$quanti.var)) + 
-                    stat_bin(aes(y=cumsum(..count..)), binwidth = binwidth, geom = "line") +
-                    ylab("")
+                temp = print(ggplot(donnees(), aes_string(input$quanti.var)) + 
+                                 stat_bin(aes(y=cumsum(..count..)), binwidth = binwidth))
             } else if (input$quanti.courbe.bins.type == 3) {
                 # Répartition personnalisée
                 if (is.null(input$quanti.courbe.breaks)) return(NULL)
+                if (input$quanti.courbe.breaks == "") return(NULL)
                 breaks = as.numeric(strsplit(input$quanti.courbe.breaks, ",")[[1]])
                 x = donnees()[,input$quanti.var]
                 xmin = min(x, na.rm = TRUE)
                 xmax = max(x, na.rm = TRUE)
                 if (is.numeric(breaks) & length(breaks) > 1) 
                     if (max(breaks, na.rm = TRUE) > xmin & min(breaks, na.rm = TRUE) < xmax)
-                        ggplot(donnees(), aes_string(input$quanti.var)) + 
-                            stat_bin(aes(y = cumsum(..density..)), breaks = breaks, geom = "line") +
-                            ylab("")
+                        temp = print(ggplot(donnees(), aes_string(input$quanti.var)) + 
+                                         stat_bin(aes(y = cumsum(..density..)), breaks = breaks))
             }
+            g = ggplot()
+            if (input$quanti.courbe.hist == 1) {
+                # Ajout de l'histogramme empilé en fond
+                g = g + geom_rect(data = temp$data[[1]], 
+                                  aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = ymax), 
+                                  fill = "gray50")
+            }
+            d = data.frame(x = c(temp$data[[1]]$xmin[1], temp$data[[1]]$xmax),
+                           y = c(0, temp$data[[1]]$y))
+            g + geom_line(data = d, aes(x, y)) +
+                xlab(input$quanti.var) +
+                ylab("count")
         }
     })
 
