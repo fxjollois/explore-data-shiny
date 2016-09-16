@@ -310,14 +310,14 @@ shinyServer(function(input, output, session) {
             if (input$quanti.courbe.bins.type == 1) {
                 # Par nombre de bins
                 temp = print(ggplot(donnees(), aes_string(input$quanti.var)) + 
-                                 stat_bin(aes(y=cumsum(..count..)), bins = input$quanti.courbe.bins))
+                                 stat_bin(aes(y=cumsum(..density..)), bins = input$quanti.courbe.bins))
             } else if (input$quanti.courbe.bins.type == 2) {
                 # Par largeur de bins
                 if (is.null(input$quanti.courbe.binwidth)) return(NULL)
                 binwidth = as.numeric(input$quanti.courbe.binwidth)
                 if (is.na(binwidth)) return(NULL)
                 temp = print(ggplot(donnees(), aes_string(input$quanti.var)) + 
-                                 stat_bin(aes(y=cumsum(..count..)), binwidth = binwidth))
+                                 stat_bin(aes(y=cumsum(..density..)), binwidth = binwidth))
             } else if (input$quanti.courbe.bins.type == 3) {
                 # Répartition personnalisée
                 if (is.null(input$quanti.courbe.breaks)) return(NULL)
@@ -332,17 +332,18 @@ shinyServer(function(input, output, session) {
                                          stat_bin(aes(y = cumsum(..density..)), breaks = breaks))
             }
             g = ggplot()
+            data = temp$data[[1]]
+            d = data.frame(x = c(data$xmin[1], data$xmax),
+                           y = c(0, cumsum(data$density * (data$xmax - data$xmin))))
             if (input$quanti.courbe.hist == 1) {
                 # Ajout de l'histogramme empilé en fond
                 g = g + geom_rect(data = temp$data[[1]], 
-                                  aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = ymax), 
+                                  aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = cumsum(density * (xmax - xmin))), 
                                   fill = "gray50")
             }
-            d = data.frame(x = c(temp$data[[1]]$xmin[1], temp$data[[1]]$xmax),
-                           y = c(0, temp$data[[1]]$y))
             g + geom_line(data = d, aes(x, y)) +
                 xlab(input$quanti.var) +
-                ylab("count")
+                ylab("cumulative freq.")
         }
     })
 
