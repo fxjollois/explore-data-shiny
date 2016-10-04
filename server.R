@@ -394,14 +394,14 @@ shinyServer(function(input, output, session) {
             if (is.null(input$quali.bar.type)) return(NULL)
             # Diagramme en barres
             if (input$quali.bar.type == 1)
-                ggplot(df, aes(x, fill = x)) + geom_bar() + 
+                ggplot(na.omit(df), aes(x, fill = x)) + geom_bar() + 
                     xlab("") + ylab("Effectifs") + labs(fill = "")
             else
-                ggplot(df, aes(x, fill = x)) + geom_bar(aes(y = (..count..)/sum(..count..))) + 
+                ggplot(na.omit(df), aes(x, fill = x)) + geom_bar(aes(y = (..count..)/sum(..count..))) + 
                     xlab("") + ylab("proportions") + labs(fill = "") + scale_y_continuous(labels = percent)
         } else if (input$quali.type == 2) {
             # Diagramme circulaire
-            ggplot(df, aes("", fill = x)) + 
+            ggplot(na.omit(df), aes("", fill = x)) + 
                 scale_y_continuous(labels = percent) +
                 geom_bar(aes(y = (..count..)/sum(..count..)), width = 1) + 
                 coord_polar(theta = "y") + 
@@ -524,7 +524,7 @@ shinyServer(function(input, output, session) {
         if (is.numeric(don$y)) don$y = factor(don$y)
         if (input$qualiquali.type == 1) {
             if (is.null(input$qualiquali.bar.type)) return(NULL)
-            g = ggplot(don, aes(x, fill = y))
+            g = ggplot(na.omit(don), aes(x, fill = y))
             # Diagramme en barres
             if (input$qualiquali.bar.type == 0)
                 g = g + geom_bar()
@@ -540,7 +540,7 @@ shinyServer(function(input, output, session) {
                 labs(fill = input$qualiquali.var2)
         } else if (input$qualiquali.type == 2) {
             # Heatmap
-            ggplot(don) + geom_bin2d(aes(x, y)) + 
+            ggplot(na.omit(don)) + geom_bin2d(aes(x, y)) + 
                 xlab(input$qualiquali.var1) +
                 ylab(input$qualiquali.var2)
         }
@@ -594,18 +594,18 @@ shinyServer(function(input, output, session) {
         don$z = factor(don$z)
         if (input$qualiquanti.type == 1) {
             # Histogramme
-            ggplot(don) + geom_histogram(aes(x, ..density.., fill=z)) +
+            ggplot(na.omit(don)) + geom_histogram(aes(x, ..density.., fill=z)) +
                 facet_grid(z~.) +
                 xlab(input$qualiquanti.varQt) +
                 labs(fill = input$qualiquanti.varQl)
         } else if (input$qualiquanti.type == 2) {
             # Boîtes à moustaches
-            ggplot(don) + geom_boxplot(aes(z, x, fill=z)) +
+            ggplot(na.omit(don)) + geom_boxplot(aes(z, x, fill=z)) +
                 ylab(input$qualiquanti.varQt) + xlab("") +
                 labs(fill = input$qualiquanti.varQl)
         } else if (input$qualiquanti.type == 3) {
             # Fréquences cumulées
-            ggplot(don, aes(x, color=z)) + stat_ecdf() +
+            ggplot(na.omit(don), aes(x, color=z)) + stat_ecdf() +
                 xlab(input$qualiquanti.varQt) +
                 ylab("") +
                 labs(color = input$qualiquanti.varQl)
