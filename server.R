@@ -26,7 +26,7 @@ shinyServer(function(input, output, session) {
     donnees.originales <- reactive({
         if (input$donnees.choix != "fichier") {
             # Données internes
-            get(input$donnees.choix)
+            data.frame(get(input$donnees.choix))
         } else {
             # Données à charger
             if (is.null(input$donnees.fichier.input)) return (NULL)
@@ -236,8 +236,10 @@ shinyServer(function(input, output, session) {
         }
     })
     output$quanti.info <- renderDataTable({
+        don = donnees()
+        if (is.null(don)) return(NULL)
         if (input$quanti.type != 0) return(NULL)
-        x = donnees()[,input$quanti.var]
+        x = don[,input$quanti.var]
         mat = rbind(
             c("Nombre de valeurs", length(x)),
             c("Nombre de valeurs manquantes", sum(is.na(x))),
