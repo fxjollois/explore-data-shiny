@@ -1,14 +1,8 @@
 # A FAIRE
 
-## Quelques petits trucs en plus
-
-- Intégrer plus de jeux de données
-
 ## Remarques de J. Dedecker
 
-2) sur quali-quanti:
-
-- Pour les histogrammes conditionnels: ici, le graphe le plus
+- sur quali-quanti: Pour les histogrammes conditionnels: ici, le graphe le plus
 important est celui en densité de fréquence. Il n'y a qu'avec
 celui-là qu'on peut faire une comparaisons des densités conditionnelles
 si les populations sont de tailles très différentes. Donc je remplacerai
@@ -19,7 +13,18 @@ c'est le cas sur certains exemples) de se retrouver avec un
 faille laisser les histogrammes en effectif; il peuvent être présentés
 sur deux graphes séparés.
 
-3) sur quanti-quanti, je n'ai pas grand chose à ajouter. Je ne sais pas
+- sur quanti-quanti, je n'ai pas grand chose à ajouter. Je ne sais pas
 si c'est facile d'ajouter des tableaux croisés par classes, car il y a
 le problème du choix des classes; c'est la seule chose qui manquerait ici,
 mais ce n'est pas forcément simple à faire.
+
+- pour quali-quanti: calcul de vinter vintra rapport de corrélation
+et indicateur de Fischer (et sa p-valeur). Tout cela peut a priori
+(à renormalisations éventuelles près) s'extraire d'une sortie de la
+commande anova.
+
+- pour  quali-quali: tableau des effectifs théoriques; calcul de
+l'indicateur du chi2 et sa p-valeur.
+
+- pour quanti-quanti, outre le nuage et le tracé de la droite, calcul
+de la covariance et du coefficient de corrélation.
