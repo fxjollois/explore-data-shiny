@@ -129,7 +129,7 @@ shinyServer(function(input, output, session) {
         res = data.frame(
             check.names = FALSE,
             "Variable" = names(don),
-            "Type" = unlist(lapply(don, class)),
+            "Type" = sapply(sapply(don, class), paste, collapse = " "),
             "Nombre de valeurs distinctes" = unlist(lapply(don, function (v) { return (length(unique(v))) })),
             "Valeurs" = unlist(lapply(don, function(v) { 
                     if (is.factor(v) | is.character(v)) {
