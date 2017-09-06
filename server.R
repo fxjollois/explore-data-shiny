@@ -83,11 +83,79 @@ shinyServer(function(input, output, session) {
             paste("Nombre de colonnes : ", ncol(don))
     })
     
-    observe({
+    output$aide <- renderUI({
+        if (input$donnees.choix != "fichier") {
+            includeHTML(paste("aide/", input$donnees.choix, ".html", sep = ""))
+        } else {
+            p("Aucune aide à afficher (données externes)")
+        }
+    })
+
+    #############################################
+    # Création de nouvelles variables
+    
+    nouvord.liste <- list()
+    
+    observeEvent(
+        input$nouvord.ajout,
+        {
+            e = input$nouvord.ajout
+            don = donnees.originales()
+            nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
+            if (length(nom.quanti) > 0) {
+                insertUI(
+                    paste0("#nouvord"),
+                    "beforeEnd",
+                    list(
+                        fluidRow(
+                            id = paste0("nouvord", e),
+                            column(width = 3, textInput(paste0("nouvord", e, ".nom"), "Nom de la variable", paste0("nouvelle", e), placeholder = "donner le nom de la nouvelle variable")),
+                            column(width = 3, selectInput(paste0("nouvord", e, ".var"), "Variable de départ", nom.quanti)),
+                            column(width = 6, textInput(paste0("nouvord", e, ".cut"), "Découpage", 5, placeholder = "indiquer ici les bornes des intervalles"))
+                        ),
+                        fluidRow(
+                            column(width = 3, tableOutput(paste0("nouvord", e, ".tab"))),
+                            column(width = 9, plotOutput(paste0("nouvord", e, ".bar")))
+                        )
+                    )
+                )
+            
+                output[[paste0("nouvord", e, ".tab")]] <- renderTable({
+                    don = donneesAug.ord()
+                    table(don[,input[[paste0("nouvord", e, ".nom")]]], useNA = "ifany")
+                })
+                output[[paste0("nouvord", e, ".bar")]] <- renderPlot({
+                    don = donneesAug.ord()
+                    barplot(table(don[,input[[paste0("nouvord", e, ".nom")]]], useNA = "ifany"))
+                })
+            }
+        }
+    )
+    
+    donneesAug.ord <- reactive({
         don = donnees.originales()
         
-        if (!is.null(don)) {
+        vars = sub(".var", "", names(input)[grep("nouvord[0-9]+.var", names(input))])
         
+        if (length(vars) == 0) { return (don)}
+        
+        for (v in vars) {
+            variable = input[[paste0(v, ".var")]]
+            decoupage = as.numeric(strsplit(input[[paste0(v, ".cut")]], ",")[[1]])
+            don[input[[paste0(v, ".nom")]]] = cut(don[[variable]], decoupage)
+        }
+        
+        don
+    })
+
+    #############################################
+    # Mise à jour des variables dans les sélecteurs
+    
+    observe({
+        don = donnees()
+        
+        if (!is.null(don)) {
+            
             nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
             nom.quali = names(don)
             
@@ -112,14 +180,6 @@ shinyServer(function(input, output, session) {
         }
     })
     
-    output$aide <- renderUI({
-        if (input$donnees.choix != "fichier") {
-            includeHTML(paste("aide/", input$donnees.choix, ".html", sep = ""))
-        } else {
-            p("Aucune aide à afficher (données externes)")
-        }
-    })
-
     #############################################
     # Description des variables
     output$variables <- renderDataTable({
@@ -150,7 +210,7 @@ shinyServer(function(input, output, session) {
     # Sous-populations
     
     donnees <- reactive({
-        don = donnees.originales()
+        don = donneesAug.ord()
         don2 = NULL
         try({
             don2 = eval(parse(text = paste("subset(don, subset =", input$restrict, ")")))
@@ -160,7 +220,7 @@ shinyServer(function(input, output, session) {
     output$restrict.ok <- renderUI({
         don = donnees()
         if (is.null(don))
-            p(class="bg-danger", "Vos critères de resrtriction sont incompatibles avec les données")
+            p(class="bg-danger", "Vos critères de restriction sont incompatibles avec les données")
         else
             p(class="bg-success", "Critères compatibles")
     })

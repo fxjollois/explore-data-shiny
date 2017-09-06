@@ -54,8 +54,7 @@ shinyUI(navbarPage(
                     ),
                     mainPanel(
                         uiOutput("nouvord.ui"),
-                        tags$div(id = "nouvord"),
-                        tableOutput("nouvord.res")
+                        tags$div(id = "nouvord")
                     )
                 )
             ),
