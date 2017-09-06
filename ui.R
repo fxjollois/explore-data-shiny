@@ -40,8 +40,29 @@ shinyUI(navbarPage(
     # Description des variables
     tabPanel(
         "Variables",
-        dataTableOutput("variables"),
-        style = "overflow: scroll;"
+        tabsetPanel(
+            tabPanel(
+                "Existantes",
+                dataTableOutput("variables"),
+                style = "overflow: scroll;"
+            ),
+            tabPanel(
+                "Nouvelles ordinales",
+                sidebarLayout(
+                    sidebarPanel(
+                        actionButton("nouvord.ajout", "Ajout d'une nouvelle variable")
+                    ),
+                    mainPanel(
+                        uiOutput("nouvord.ui"),
+                        tags$div(id = "nouvord"),
+                        tableOutput("nouvord.res")
+                    )
+                )
+            ),
+            tabPanel(
+                "Nouvelles qualitatives"
+            )
+        )
     ),
 
     #############################################
