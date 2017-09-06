@@ -151,7 +151,7 @@ shinyServer(function(input, output, session) {
             updateSelectInput(session, "qualiquali.var2", choices = nom.quali)
             
             # quali-quanti
-            updateSelectInput(session, "qualiquanti.varQl", choices = names(don))
+            updateSelectInput(session, "qualiquanti.varQl", choices = nom.quali)
             updateSelectInput(session, "qualiquanti.varQt", choices = nom.quanti)
             
             # création de variables
@@ -188,7 +188,7 @@ shinyServer(function(input, output, session) {
     #############################################
     # Sous-populations
     
-    donnees <- reactive({
+    donnees.souspop <- reactive({
         don = donneesAug.ord()
         don2 = NULL
         try({
@@ -197,21 +197,29 @@ shinyServer(function(input, output, session) {
         don2
     })
     output$restrict.ok <- renderUI({
-        don = donnees()
+        don = donnees.souspop()
         if (is.null(don))
             p(class="bg-danger", "Vos critères de restriction sont incompatibles avec les données")
         else
             p(class="bg-success", "Critères compatibles")
     })
     output$donnees.restrict <- renderDataTable({
-        don = donnees()
+        don = donnees.souspop()
         cbind(" " = rownames(don), don)
     })
     output$restrict.nblignes <- renderText({
-        don = donnees()
+        don = donnees.souspop()
         paste("Nombre de lignes : ", nrow(don))
     })
 
+    #############################################
+    # Données finales
+    
+    donnees <- reactive({
+        don = donnees.souspop()
+        don
+    })
+    
     #############################################
     # Quantitative
     
@@ -397,9 +405,6 @@ shinyServer(function(input, output, session) {
                 radioButtons("quali.cum", label = "Proportions cumulés", choices = c("Non" = 0, "Oui" = 1)),
                 sliderInput("quali.arrondi", label = "Arrondi", min = 0, max = 5, value = 2)
             )
-        } else if (input$quali.type == 1) {
-            # Diagramme en barres
-            radioButtons("quali.bar.type", label = "Représentation", choices = c("Effectifs" = 1, "Proportions" = 2))
         }
     })
     output$quali.info <- renderDataTable({
@@ -432,15 +437,14 @@ shinyServer(function(input, output, session) {
     output$quali.plot <- renderPlot({
         df = data.frame(x = factor(donnees()[,input$quali.var]))
         if (input$quali.type == 1) {
-            if (is.null(input$quali.bar.type)) return(NULL)
-            # Diagramme en barres
-            if (input$quali.bar.type == 1)
-                ggplot(na.omit(df), aes(x, fill = x)) + geom_bar() + 
-                    xlab("") + ylab("Effectifs") + labs(fill = "")
-            else
-                ggplot(na.omit(df), aes(x, fill = x)) + geom_bar(aes(y = (..count..)/sum(..count..))) + 
-                    xlab("") + ylab("proportions") + labs(fill = "") + scale_y_continuous(labels = percent)
+            # Diagramme en barres (en effectifs)
+            ggplot(na.omit(df), aes(x, fill = x)) + geom_bar() + 
+                xlab("") + ylab("Effectifs") + labs(fill = "")
         } else if (input$quali.type == 2) {
+            # Diagramme en barres (en fréquences)
+            ggplot(na.omit(df), aes(x, fill = x)) + geom_bar(aes(y = (..count..)/sum(..count..))) + 
+                xlab("") + ylab("proportions") + labs(fill = "") + scale_y_continuous(labels = percent)
+        } else if (input$quali.type == 3) {
             # Diagramme circulaire
             ggplot(na.omit(df), aes("", fill = x)) + 
                 scale_y_continuous(labels = percent) +
