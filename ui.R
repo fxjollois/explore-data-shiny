@@ -1,5 +1,3 @@
-library(shiny)
-
 shinyUI(navbarPage(
     "Explore Data",
     
