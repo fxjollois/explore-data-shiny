@@ -518,7 +518,7 @@ shinyServer(function(input, output, session) {
             # Numérique
             list(
                 radioButtons("qualiquali.tab.type", "Type de tableau",
-                             c("Effectifs" = 0, "Proportions" = 1, "Profils ligne" = 2, "Profils colonne" = 3)),
+                             c("Effectifs" = 0, "Proportions" = 1, "Profils ligne" = 2, "Profils colonne" = 3, "Effectifs théoriques" = 4)),
                 uiOutput("qualiquali.tab.ui")
             )
         } else if (input$qualiquali.type == 1) {
@@ -558,6 +558,9 @@ shinyServer(function(input, output, session) {
                 tabprop = as.data.frame.matrix(prop.table(tab, margin = 2))
                 tabprop["Total",] = apply(tabprop, 2, sum)
                 rendu = to.pct(tabprop, input$qualiquali.tab.arrondi)
+            } else if (input$qualiquali.tab.type == 4) {
+                # Effectifs théoriques
+                rendu = round(as.data.frame.matrix(chisq.test(tab)$expected), input$qualiquali.tab.arrondi)
             }
         }
         cbind(" " = rownames(rendu), rendu)
