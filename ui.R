@@ -48,7 +48,14 @@ shinyUI(navbarPage(
                 "Nouvelles ordinales",
                 sidebarLayout(
                     sidebarPanel(
-                        actionButton("nouvord.ajout", "Ajout d'une nouvelle variable")
+                        actionButton("nouvord.ajout", "Ajout d'une nouvelle variable"),
+                        helpText(
+                            p("Le découpage d'une variable peut se faire de deux façon :"),
+                            tags$ul(
+                                tags$li("un entier : nombre d'intervalles (qui seront donc de même taille"),
+                                tags$li("une liste de valeurs (séparées par des ',') : valeurs limites des intervalles")
+                            )
+                        )
                     ),
                     mainPanel(
                         uiOutput("nouvord.ui"),
