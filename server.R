@@ -116,7 +116,7 @@ shinyServer(function(input, output, session) {
         
         vars = sub(".var", "", names(input)[grep("nouvord[0-9]+.var", names(input))])
         
-        if (length(vars) == 0) { return (don)}
+        if (length(vars) == 0) { return (don) }
         
         for (v in vars) {
             variable = input[[paste0(v, ".var")]]
