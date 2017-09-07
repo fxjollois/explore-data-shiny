@@ -529,8 +529,22 @@ shinyServer(function(input, output, session) {
     })
     output$qualiquali.tab.ui <- renderUI({
         if (is.null(input$qualiquali.tab.type)) return(NULL)
-        if (input$qualiquali.tab.type > 0)
-            sliderInput("qualiquali.tab.arrondi", label = "Arrondi", min = 0, max = 5, value = 2)
+        if (input$qualiquali.tab.type > 0) {
+            if (input$qualiquali.tab.type == 4) {
+                x = factor(donnees()[,input$qualiquali.var1])
+                levels(x) = paste(input$qualiquali.var1, levels(x), sep = "=")
+                y = factor(donnees()[,input$qualiquali.var2])
+                levels(y) = paste(input$qualiquali.var2, levels(y), sep = "=")
+                t = chisq.test(tab)
+                list(
+                    sliderInput("qualiquali.tab.arrondi", label = "Arrondi", min = 0, max = 5, value = 2),
+                    paste("Statitique du chi-deux :", t$statistic),
+                    paste("p-valeur :", t$p.value)
+                )
+            } else {
+                sliderInput("qualiquali.tab.arrondi", label = "Arrondi", min = 0, max = 5, value = 2)
+            }
+        }
     })
     output$qualiquali.table <- renderDataTable({
         if (input$qualiquali.type > 0) return(NULL)
