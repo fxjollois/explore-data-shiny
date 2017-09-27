@@ -7,9 +7,6 @@ library(httr)
 # Chargement de Recensement85
 recensement85 = read.table("donnees/Recensement85.csv", sep = ",", header = T)
 
-# Options pour l'affichage d'un DataTable très basique
-opt.DT.simple = list(paging = FALSE, searching = FALSE, ordering = FALSE, info = FALSE)
-
 # Fonction permettant d'afficher des pourcentages au lieu de proportions
 to.pct <- function(df, decimal = 0) {
     nom.lignes = rownames(df)
