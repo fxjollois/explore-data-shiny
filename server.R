@@ -124,6 +124,19 @@ shinyServer(function(input, output, session) {
             don[input[[paste0(v, ".nom")]]] = cut(don[[variable]], decoupage)
         }
         
+        # mise à jour des listes de variables
+        nom.quali = names(don)
+        
+        # quali
+        updateSelectInput(session, "quali.var", choices = nom.quali)
+        
+        # quali-quali
+        updateSelectInput(session, "qualiquali.var1", choices = nom.quali)
+        updateSelectInput(session, "qualiquali.var2", choices = nom.quali)
+        
+        # quali-quanti
+        updateSelectInput(session, "qualiquanti.varQl", choices = nom.quali)
+        
         don
     })
 
@@ -131,7 +144,7 @@ shinyServer(function(input, output, session) {
     # Mise à jour des variables dans les sélecteurs
     
     observe({
-        don = donnees()
+        don = donnees.originales()
         
         if (!is.null(don)) {
             
