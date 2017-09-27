@@ -433,6 +433,11 @@ shinyServer(function(input, output, session) {
                 radioButtons("quali.cum", label = "Proportions cumulés", choices = c("Non" = 0, "Oui" = 1)),
                 sliderInput("quali.arrondi", label = "Arrondi", min = 0, max = 5, value = 2)
             )
+        } else {
+            if (input$quali.type == 1) {
+                # Diagramme en barres
+                radioButtons("quali.bar.type", "Type de diagramme", c("en effectifs" = 0, "en fréquences" = 1))
+            }
         }
     })
     output$quali.info <- renderDataTable({
@@ -465,14 +470,17 @@ shinyServer(function(input, output, session) {
     output$quali.plot <- renderPlot({
         df = data.frame(x = factor(donnees()[,input$quali.var]))
         if (input$quali.type == 1) {
-            # Diagramme en barres (en effectifs)
-            ggplot(na.omit(df), aes(x, fill = x)) + geom_bar() + 
-                xlab("") + ylab("Effectifs") + labs(fill = "")
+            if (is.null(input$quali.bar.type)) return (NULL)
+            if (input$quali.bar.type == 0) {
+                # Diagramme en barres (en effectifs)
+                ggplot(na.omit(df), aes(x, fill = x)) + geom_bar() + 
+                    xlab("") + ylab("Effectifs") + labs(fill = "")
+            } else {
+                # Diagramme en barres (en fréquences)
+                ggplot(na.omit(df), aes(x, fill = x)) + geom_bar(aes(y = (..count..)/sum(..count..))) + 
+                    xlab("") + ylab("Proportions") + labs(fill = "") + scale_y_continuous(labels = percent)
+            }
         } else if (input$quali.type == 2) {
-            # Diagramme en barres (en fréquences)
-            ggplot(na.omit(df), aes(x, fill = x)) + geom_bar(aes(y = (..count..)/sum(..count..))) + 
-                xlab("") + ylab("proportions") + labs(fill = "") + scale_y_continuous(labels = percent)
-        } else if (input$quali.type == 3) {
             # Diagramme circulaire
             ggplot(na.omit(df), aes("", fill = x)) + 
                 scale_y_continuous(labels = percent) +
@@ -485,13 +493,6 @@ shinyServer(function(input, output, session) {
 
     #############################################
     # Quanti-Quanti
-    observe({
-        don = donnees()
-        bivar.quanti1 = input$quantiquanti.var1
-        nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
-        
-        updateSelectInput(session, "quantiquanti.var2", choices = nom.quanti[nom.quanti != bivar.quanti1])
-    })
     output$quantiquanti.ui <- renderUI({
         if (input$quantiquanti.type == 0) {
             # Numérique
@@ -534,13 +535,6 @@ shinyServer(function(input, output, session) {
     
     #############################################
     # Quali-Quali
-    observe({
-        don = donnees()
-        bivar.quali1 = input$qualiquali.var1
-        nom.quali = names(don)
-        
-        updateSelectInput(session, "qualiquali.var2", choices = nom.quali[nom.quali != bivar.quali1])
-    })
     output$qualiquali.ui <- renderUI({
         if (input$qualiquali.type == 0) {
             # Numérique
@@ -638,13 +632,6 @@ shinyServer(function(input, output, session) {
     
     #############################################
     # Quali-Quanti
-    observe({
-        don = donnees()
-        bivar.ql = input$qualiquanti.varQl
-        nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
-        
-        updateSelectInput(session, "qualiquanti.varQt", choices = nom.quanti[nom.quanti != bivar.ql])
-    })
     output$qualiquanti.ui <- renderUI({
         if (input$qualiquanti.type == 0) {
             # Numérique
