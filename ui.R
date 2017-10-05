@@ -138,7 +138,7 @@ shinyUI(navbarPage(
                         selectInput(
                             "quali.type", 
                             label = "Représentation", 
-                            choices = c("Numérique" = 0, "Diagramme en barres" = 1, "Diagramme circulaire" = 3)
+                            choices = c("Numérique" = 0, "Diagramme en barres" = 1, "Diagramme circulaire" = 2)
                         ),
                         uiOutput("quali.ui")
                     ),
