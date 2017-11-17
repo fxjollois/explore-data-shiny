@@ -214,6 +214,7 @@ shinyUI(navbarPage(
                     ),
                     mainPanel(
                         dataTableOutput("qualiquali.table"),
+                        dataTableOutput("qualiquali.indicateurs"),
                         plotOutput("qualiquali.plot"),
                         style = "overflow: scroll;"
                     )
@@ -245,6 +246,7 @@ shinyUI(navbarPage(
                     mainPanel(
                         dataTableOutput("qualiquanti.table"),
                         dataTableOutput("qualiquanti.tablebis"),
+                        dataTableOutput("qualiquanti.indicateurs"),
                         plotOutput("qualiquanti.plot"),
                         style = "overflow: scroll;"
                     )

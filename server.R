@@ -601,6 +601,21 @@ shinyServer(function(input, output, session) {
         }
         cbind(" " = rownames(rendu), rendu)
     }, options = opt.DT.simple)
+    output$qualiquali.indicateurs <- renderDataTable({
+        if (input$qualiquali.type > 0) return(NULL)
+        if (is.null(input$qualiquali.tab.type)) return(NULL)
+        x = factor(donnees()[,input$qualiquali.var1])
+        levels(x) = paste(input$qualiquali.var1, levels(x), sep = "=")
+        y = factor(donnees()[,input$qualiquali.var2])
+        levels(y) = paste(input$qualiquali.var2, levels(y), sep = "=")
+        tab = table(x, y)
+        chisq = chisq.test(tab)
+        data.frame(
+            "Statistique" = c("chi²", "p-valeur"),
+            "Valeur" = c(format(chisq$statistic, digits = 2, nsmall = 2), 
+                         format.pval(chisq$p.value))
+        )
+    }, options = opt.DT.simple)
     output$qualiquali.plot <- renderPlot({
         if (input$qualiquali.type == 0) return(NULL)
         don = setNames(donnees()[,c(input$qualiquali.var1, input$qualiquali.var2)], c("x", "y"))
@@ -663,6 +678,27 @@ shinyServer(function(input, output, session) {
             "Médiane" = round(tapply(x, z, median, na.rm = TRUE), input$qualiquanti.arrondi),
             "Q3" = round(tapply(x, z, quantile, na.rm = TRUE, .75), input$qualiquanti.arrondi),
             "Maximum" = round(tapply(x, z, max, na.rm = TRUE), input$qualiquanti.arrondi)
+        )
+    }, options = opt.DT.simple)
+    output$qualiquanti.indicateurs <- renderDataTable({
+        if (input$qualiquanti.type > 0) return(NULL)
+        x = donnees()[,input$qualiquanti.varQt]
+        z = factor(donnees()[,input$qualiquanti.varQl])
+        aov = anova(lm(x ~ z))
+        Vinter  = aov$`Sum Sq`[1] / (aov$`Df`[1] + aov$`Df`[2] + 1)
+        Vintra  = aov$`Sum Sq`[2] / (aov$`Df`[1] + aov$`Df`[2] + 1)
+        Rap_cor = aov$`Sum Sq`[1] / (aov$`Sum Sq`[1] + aov$`Sum Sq`[2])
+        Fisher  = aov$`F value`[1]
+        Pval_Fisher = aov$`Pr(>F)`[1]
+        data.frame(
+            "Statistique" = c("Vinter", "Vintra", "Rapport de corrélation",
+                              "Indicateur de Fisher", "p-valeur"),
+            "Valeur" = c(format(Vinter, digits = 2, nsmall = 2), 
+                         format(Vintra, digits = 2, nsmall = 2), 
+                         format(Rap_cor, digits = 2, nsmall = 2), 
+                         format(Fisher, digits = 2, nsmall = 2), 
+                         format.pval(Pval_Fisher)),
+            stringsAsFactors = FALSE
         )
     }, options = opt.DT.simple)
     output$qualiquanti.plot <- renderPlot({
