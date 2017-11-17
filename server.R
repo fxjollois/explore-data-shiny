@@ -212,6 +212,12 @@ shinyServer(function(input, output, session) {
         )
         res
     }, options = opt.DT.simple)
+    
+    output$variables2 <- renderUI({
+        don = donnees()
+        if (is.null(don)) return(NULL)
+        drawRepresentation(don)
+    })
 
     #############################################
     # Sous-populations

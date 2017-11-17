@@ -41,7 +41,8 @@ shinyUI(navbarPage(
         tabsetPanel(
             tabPanel(
                 "Existantes",
-                dataTableOutput("variables"),
+                # dataTableOutput("variables"),
+                htmlOutput("variables2"),
                 style = "overflow: scroll;"
             ),
             tabPanel(
