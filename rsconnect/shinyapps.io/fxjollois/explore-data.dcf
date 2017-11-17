@@ -1,0 +1,12 @@
+name: explore-data
+title: explore-data
+username:
+account: fxjollois
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 236736
+bundleId: 1081121
+url: https://fxjollois.shinyapps.io/explore-data/
+when: 1510927789.53609
+asMultiple: FALSE
+asStatic: FALSE
