@@ -120,6 +120,7 @@ shinyUI(navbarPage(
                     mainPanel(
                         dataTableOutput("quanti.info"),
                         dataTableOutput("quanti.table"),
+                        dataTableOutput("quanti.norm"),
                         plotOutput("quanti.plot"),
                         style = "overflow: scroll;"
                         )

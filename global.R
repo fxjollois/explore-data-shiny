@@ -5,13 +5,14 @@ library(scales)
 library(httr)
 library(markdown)
 
-
 library(magrittr)
 library(tidyr)
 library(dplyr)
 library(formattable)
 library(htmltools)
 library(sparkline)
+library(htmlwidgets)
+
 
 #################################################
 # Présentation des variables
@@ -19,7 +20,7 @@ library(sparkline)
 boxCell <- function(x){
     lapply(x, function(xx){
         as.character(as.tags(
-            sparkline(xx, type="box",
+            sparkline(xx, type="box", width = 500,
                       chartRangeMin = min(unlist(xx)),
                       chartRangeMax = max(unlist(xx)))
         ))
@@ -31,7 +32,8 @@ barCell <- function(x){
         t = table(xx)
         m = names(t)
         as.character(as.tags(
-            sparkline(t, type="bar",
+            sparkline(t, type="bar", width = 500,
+                      barWidth = 50, barSpacing = 10,
                       chartRangeMin = 0,
                       chartRangeMax = max(t),
                       tooltipFormat= "{{offset:val}} ({{value}})",
@@ -46,7 +48,7 @@ toWidget <- function(f) {
         formattable::as.htmlwidget() %>%
         tagList() %>%
         attachDependencies(
-            htmlwidgets:::widget_dependencies("sparkline","sparkline")
+            htmlwidgets:::widget_dependencies("sparkline", "sparkline")
         ) %>%
         browsable()
 }
@@ -64,12 +66,14 @@ drawRepresentation <- function(df) {
         slice(apply(table(var, names(df)), 1, which.max)) %>%
         mutate(class = sapply(df, function(c) return(paste(class(c), collapse = ", ")))) %>%
         select(var, class, values) %>%
+        rename(Variable = var, Type = class, Distribution = values) %>%
         formattable(
             formatters = list(
                 area(row = var.numeric, col = 3) ~ boxCell,
                 area(row = var.other, col = 3) ~ barCell
             )
-        ) %>%        toWidget()
+        ) %>%        
+        toWidget()
 }
 
 # Test pour présentation des variables

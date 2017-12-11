@@ -345,6 +345,19 @@ shinyServer(function(input, output, session) {
         res = setNames(melt(round(res, input$quanti.arrondi)), c("Statistique", "Valeur"))
         res
     }, options = opt.DT.simple)
+    output$quanti.norm <- renderDataTable({
+        if (input$quanti.type != 0) return(NULL)
+        if (is.null(input$quanti.arrondi)) return(NULL)
+        x = donnees()[,input$quanti.var]
+        s = shapiro.test(x)
+        data.frame(
+            "Statistique" = c("Shapiro-Wilk", "p-value"),
+            "Valeur" = c(
+                format(s$statistic, digits = input$quanti.arrondi),
+                format.pval(s$p.value)
+            )
+        )
+    }, options = opt.DT.simple)
     output$quanti.plot <- renderPlot({
         if (input$quanti.type == 1) {
             # Histogramme
