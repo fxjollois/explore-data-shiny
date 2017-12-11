@@ -349,9 +349,14 @@ shinyServer(function(input, output, session) {
         if (input$quanti.type != 0) return(NULL)
         if (is.null(input$quanti.arrondi)) return(NULL)
         x = donnees()[,input$quanti.var]
+        if (length(x) > 5000) {
+            return(data.frame(
+                "Normalité" = "Non réalisable pour n > 5000"
+            ))
+        }
         s = shapiro.test(x)
         data.frame(
-            "Statistique" = c("Shapiro-Wilk", "p-value"),
+            "Normalité" = c("Shapiro-Wilk", "p-value"),
             "Valeur" = c(
                 format(s$statistic, digits = input$quanti.arrondi),
                 format.pval(s$p.value)
