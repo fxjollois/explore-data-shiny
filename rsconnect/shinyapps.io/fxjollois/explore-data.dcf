@@ -5,8 +5,8 @@ account: fxjollois
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 236736
-bundleId: 1128094
+bundleId: 1160207
 url: https://fxjollois.shinyapps.io/explore-data/
-when: 1513001789.44125
+when: 1514985339.14377
 asMultiple: FALSE
 asStatic: FALSE

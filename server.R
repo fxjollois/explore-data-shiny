@@ -498,20 +498,24 @@ shinyServer(function(input, output, session) {
             if (input$quali.bar.type == 0) {
                 # Diagramme en barres (en effectifs)
                 ggplot(na.omit(df), aes(x, fill = x)) + geom_bar() + 
-                    xlab("") + ylab("Effectifs") + labs(fill = "")
+                    ylab("Effectifs") + labs(fill = "") +
+                    theme(axis.title.x = element_blank())
             } else {
                 # Diagramme en barres (en fréquences)
-                ggplot(na.omit(df), aes(x, fill = x)) + geom_bar(aes(y = (..count..)/sum(..count..))) + 
-                    xlab("") + ylab("Proportions") + labs(fill = "") + scale_y_continuous(labels = percent)
+                ggplot(na.omit(df), aes(x, fill = x)) + 
+                    geom_bar(aes(y = (..count..)/sum(..count..))) + 
+                    ylab("Proportions") + labs(fill = "") + 
+                    scale_y_continuous(labels = percent) +
+                    theme(axis.title.x = element_blank())
             }
         } else if (input$quali.type == 2) {
             # Diagramme circulaire
             ggplot(na.omit(df), aes("", fill = x)) + 
-                scale_y_continuous(labels = percent) +
                 geom_bar(aes(y = (..count..)/sum(..count..)), width = 1) + 
                 coord_polar(theta = "y") + 
-                xlab("") + ylab("") + labs(fill = input$quali.var) +
-                theme(axis.ticks = element_blank())
+                labs(fill = input$quali.var) +
+                theme(axis.ticks = element_blank(), axis.text = element_blank(), 
+                      panel.grid = element_blank(), axis.title = element_blank())
         }
     })
 
