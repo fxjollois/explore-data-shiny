@@ -4,6 +4,11 @@ opt.DT.simple = list(paging = FALSE, searching = FALSE, ordering = FALSE, info =
 # Chargement de Recensement85
 recensement85 = read.table("donnees/Recensement85.csv", sep = ",", header = T)
 
+# Chargement des données pour TP noté par F. Montestruc - janvier 2019
+ESMAA_algerie = read.table("donnees/20181221_ESMAA IUT_algerie.csv", sep = ";", header = T, dec = ",")
+ESMAA_egypte = read.table("donnees/20181221_ESMAA IUT_egypte.csv", sep = ";", header = T, dec = ",")
+ESMAA_iran = read.table("donnees/20181221_ESMAA IUT_iran.csv", sep = ";", header = T, dec = ",")
+
 # Fonction permettant d'afficher des pourcentages au lieu de proportions
 to.pct <- function(df, decimal = 0) {
     nom.lignes = rownames(df)

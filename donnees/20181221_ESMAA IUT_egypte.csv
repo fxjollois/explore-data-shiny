@@ -1,0 +1,150 @@
+Patient;Sex;Niveau;Actif;Sportif;AGE;IMC;Fumeur;control
+EGY-002-001;Male;Primary;Active;Yes;56,4;32,5;Past smoker;Uncontrolled
+EGY-002-002;Female;Primary;Non-active;Yes;53,2;40,3;No smoker;Uncontrolled
+EGY-002-003;Male;Primary;Active;Yes;49,7;27,1;Active smoker;Uncontrolled
+EGY-002-004;Male;Secondary school;Active;Yes;63,8;28,8;Past smoker;Uncontrolled
+EGY-002-005;Female;Secondary school;Active;Yes;55,8;32,1;No smoker;Uncontrolled
+EGY-002-006;Female;University degree;Non-active;Yes;62;38,8;No smoker;Uncontrolled
+EGY-002-007;Female;Secondary school;Active;Yes;41,5;24,5;Active smoker;Uncontrolled
+EGY-002-008;Male;Higher education;Active;Yes;65,9;28,4;No smoker;Uncontrolled
+EGY-002-009;Female;University degree;Non-active;Yes;70,7;34,5;No smoker;Uncontrolled
+EGY-002-010;Female;Primary;Active;Yes;53,7;27,6;Active smoker;Uncontrolled
+EGY-002-011;Female;University degree;Active;Yes;41,2;24,9;No smoker;Uncontrolled
+EGY-002-012;Male;Secondary school;Active;Yes;20,3;38,2;No smoker;Uncontrolled
+EGY-002-013;Male;Primary;Active;Yes;41,1;24,8;Active smoker;Uncontrolled
+EGY-002-014;Male;Primary;Active;Yes;56,9;30,6;Active smoker;Uncontrolled
+EGY-002-015;Male;Secondary school;Active;Yes;40,1;29,5;Active smoker;Uncontrolled
+EGY-002-016;Female;University degree;Active;Yes;52,1;27,4;No smoker;Uncontrolled
+EGY-002-017;Female;University degree;Active;Yes;27;29,3;No smoker;Partly controlled
+EGY-002-018;Male;Primary;Active;Yes;58,7;28,8;Active smoker;Uncontrolled
+EGY-002-019;Male;Primary;Active;Yes;52,5;34,4;No smoker;Uncontrolled
+EGY-002-020;Female;University degree;Active;Yes;56,4;39,1;No smoker;Partly controlled
+EGY-004-001;Male;Primary;Non-active;No;79,1;32,8;No smoker;Uncontrolled
+EGY-004-002;Male;Secondary school;Active;No;43,6;27,6;No smoker;Uncontrolled
+EGY-004-003;Female;Cannot read and write;Non-active;No;59,4;20,6;No smoker;Partly controlled
+EGY-004-004;Male;Secondary school;Active;No;49,1;26,8;No smoker;Partly controlled
+EGY-004-005;Female;Higher education;Active;Yes;42,8;28,4;No smoker;Uncontrolled
+EGY-004-006;Male;Secondary school;Non-active;Yes;61,2;29,1;No smoker;Partly controlled
+EGY-004-007;Female;Cannot read and write;Active;No;41,5;32,1;No smoker;Partly controlled
+EGY-004-008;Male;Primary;Active;No;63,5;29,5;No smoker;Uncontrolled
+EGY-004-009;Female;Secondary school;Non-active;No;24,1;32,1;No smoker;Uncontrolled
+EGY-004-010;Female;Cannot read and write;Active;No;60,4;33,4;No smoker;Uncontrolled
+EGY-005-001;Female;University degree;Active;No;57,6;34,5;No smoker;Controlled
+EGY-005-002;Female;Secondary school;Active;No;56,3;27,6;No smoker;Uncontrolled
+EGY-005-003;Male;Higher education;Active;Yes;49,1;26,4;Active smoker;Controlled
+EGY-005-004;Female;University degree;Non-active;No;33,1;29,8;No smoker;Uncontrolled
+EGY-005-005;Female;Secondary school;Active;Yes;19,1;23,8;No smoker;Uncontrolled
+EGY-005-006;Male;Secondary school;Active;No;26,1;28,5;No smoker;Uncontrolled
+EGY-005-007;Female;University degree;Active;Yes;22,1;21,9;No smoker;Partly controlled
+EGY-005-008;Male;Secondary school;Active;Yes;18,7;26,1;No smoker;Uncontrolled
+EGY-005-009;Female;Secondary school;Active;Yes;58,7;37;No smoker;Partly controlled
+EGY-005-010;Female;University degree;Non-active;No;51,1;38,6;No smoker;Uncontrolled
+EGY-006-001;Female;Secondary school;Non-active;No;47,5;35,3;No smoker;Uncontrolled
+EGY-006-002;Female;Primary;Non-active;No;35,1;24,4;No smoker;Partly controlled
+EGY-006-003;Male;Secondary school;Active;No;44,7;30,5;No smoker;Partly controlled
+EGY-006-004;Female;Secondary school;Non-active;No;19,1;21,6;No smoker;Uncontrolled
+EGY-006-005;Female;Secondary school;Active;No;37,3;30,5;No smoker;Controlled
+EGY-006-006;Female;University degree;Active;No;50,6;39,2;Active smoker;Uncontrolled
+EGY-006-007;Male;University degree;Active;No;58,1;31,4;No smoker;Uncontrolled
+EGY-006-008;Male;Secondary school;Active;No;62,3;36,8;Past smoker;Uncontrolled
+EGY-006-009;Female;Cannot read and write;Non-active;No;55,1;29,4;No smoker;Uncontrolled
+EGY-006-010;Male;Secondary school;Active;No;41,5;20,2;No smoker;Uncontrolled
+EGY-008-001;Male;Primary;Active;Yes;53,1;33,4;Past smoker;Partly controlled
+EGY-008-002;Female;Higher education;Non-active;No;63,1;29,5;No smoker;Controlled
+EGY-008-003;Female;Primary;Non-active;No;67,1;28,1;No smoker;Uncontrolled
+EGY-008-004;Female;University degree;Active;Yes;42,6;34,4;No smoker;Controlled
+EGY-008-005;Male;University degree;Active;Yes;32,5;37,1;No smoker;Uncontrolled
+EGY-008-006;Female;Primary;Non-active;No;65,5;33,5;No smoker;Uncontrolled
+EGY-008-007;Female;Primary;Non-active;No;67;30,2;No smoker;Partly controlled
+EGY-008-008;Female;University degree;Active;Yes;50,1;36;No smoker;Controlled
+EGY-008-009;Female;Cannot read and write;Non-active;Yes;58,9;31,7;No smoker;Partly controlled
+EGY-008-010;Male;Secondary school;Active;Yes;57,6;31,9;Past smoker;Partly controlled
+EGY-009-001;Female;University degree;Non-active;Yes;25,8;21,7;No smoker;Partly controlled
+EGY-009-002;Male;University degree;Active;Yes;30;21,3;Active smoker;Uncontrolled
+EGY-009-003;Female;University degree;Non-active;Yes;24,6;29,5;No smoker;Uncontrolled
+EGY-009-004;Male;Primary;Active;Yes;44,8;27,9;No smoker;Partly controlled
+EGY-009-005;Male;University degree;Active;Yes;35,3;26,1;No smoker;Partly controlled
+EGY-009-006;Male;Secondary school;Active;Yes;28,1;20,2;No smoker;Uncontrolled
+EGY-009-007;Male;University degree;Active;Yes;33,1;27,8;No smoker;Controlled
+EGY-009-008;Female;Secondary school;Non-active;Yes;37,4;24,3;No smoker;Partly controlled
+EGY-009-009;Female;Secondary school;Non-active;Yes;18,1;25,1;No smoker;Uncontrolled
+EGY-009-010;Female;University degree;Active;Yes;22,3;28;No smoker;Controlled
+EGY-010-001;Female;Higher education;Non-active;Yes;32,9;30,6;Active smoker;Partly controlled
+EGY-010-002;Male;University degree;Active;No;58;25,8;Past smoker;Partly controlled
+EGY-010-003;Female;University degree;Active;No;45,8;26,6;No smoker;Controlled
+EGY-010-004;Female;Secondary school;Non-active;No;46,5;24;No smoker;Controlled
+EGY-010-005;Male;University degree;Non-active;No;61;28,5;No smoker;Partly controlled
+EGY-010-006;Female;Higher education;Active;No;32,6;20,1;No smoker;Partly controlled
+EGY-010-007;Male;University degree;Active;No;57,2;31,7;Past smoker;Controlled
+EGY-010-008;Female;Primary;Non-active;No;55;25,5;No smoker;Partly controlled
+EGY-010-009;Female;University degree;Active;Yes;57,3;37,7;No smoker;Partly controlled
+EGY-010-010;Female;University degree;Active;No;60;27,7;No smoker;Partly controlled
+EGY-011-001;Male;Secondary school;Active;No;59,2;31,2;Active smoker;Uncontrolled
+EGY-011-002;Male;Primary;Active;Yes;57,7;31,4;Active smoker;Controlled
+EGY-011-003;Male;Primary;Active;No;54,8;36;Past smoker;Uncontrolled
+EGY-011-004;Male;University degree;Active;No;53,7;24,4;Active smoker;Uncontrolled
+EGY-011-005;Male;Secondary school;Active;Yes;34,6;27,9;Past smoker;Partly controlled
+EGY-011-006;Male;Higher education;Active;No;70,2;25,8;Active smoker;Uncontrolled
+EGY-011-007;Male;Secondary school;Active;Yes;54,6;34,1;Active smoker;Uncontrolled
+EGY-011-008;Male;Primary;Active;No;43;45,8;Active smoker;Uncontrolled
+EGY-011-009;Male;Secondary school;Active;Yes;49,1;32,8;Active smoker;Controlled
+EGY-011-010;Male;Higher education;Active;Yes;31,6;23,6;Active smoker;Controlled
+EGY-012-001;Female;Higher education;Active;No;54,6;32,4;No smoker;Partly controlled
+EGY-012-002;Female;University degree;Active;Yes;33,2;23,1;No smoker;Partly controlled
+EGY-012-003;Female;University degree;Active;Yes;25,3;25,8;No smoker;Controlled
+EGY-012-004;Male;Secondary school;Active;No;46,6;27,5;Active smoker;Partly controlled
+EGY-012-005;Male;University degree;Active;Yes;29,6;21,4;Active smoker;Controlled
+EGY-012-006;Male;University degree;Active;Yes;41;26,9;Active smoker;Uncontrolled
+EGY-012-007;Male;University degree;Active;Yes;35,7;23;Active smoker;Controlled
+EGY-012-008;Female;University degree;Active;No;43,9;34;No smoker;Controlled
+EGY-012-009;Female;University degree;Active;No;30,2;29,2;No smoker;Controlled
+EGY-012-010;Male;Secondary school;Active;Yes;27,7;23,6;Active smoker;Controlled
+EGY-012-011;Male;Higher education;Active;Yes;35,1;23;Active smoker;Controlled
+EGY-012-012;Female;University degree;Active;No;42,4;34;No smoker;Controlled
+EGY-012-013;Female;University degree;Active;No;30,6;30,2;No smoker;Controlled
+EGY-012-014;Female;University degree;Active;No;28,3;25,8;No smoker;Controlled
+EGY-012-015;Male;University degree;Active;No;40,9;22,1;Active smoker;Uncontrolled
+EGY-012-016;Female;University degree;Active;No;41,3;32,4;No smoker;Controlled
+EGY-012-017;Male;University degree;Active;No;24,4;27,5;Active smoker;Controlled
+EGY-012-018;Female;University degree;Active;Yes;20,9;24;No smoker;Controlled
+EGY-012-019;Male;University degree;Active;No;23,4;26,9;Active smoker;Controlled
+EGY-012-020;Female;University degree;Active;No;25,4;29,2;No smoker;Controlled
+EGY-013-001;Female;Secondary school;Active;Yes;21,9;22,1;No smoker;Controlled
+EGY-013-002;Male;University degree;Active;Yes;47,1;29,7;No smoker;Controlled
+EGY-013-003;Male;Primary;Active;Yes;76,9;23,5;No smoker;Controlled
+EGY-013-004;Female;Cannot read and write;Active;Yes;50;33,2;No smoker;Controlled
+EGY-013-005;Male;Cannot read and write;Active;Yes;80,2;18,9;No smoker;Controlled
+EGY-013-006;Female;University degree;Active;Yes;22,3;22,6;No smoker;Controlled
+EGY-013-007;Female;University degree;Active;Yes;62,6;26,8;No smoker;Controlled
+EGY-013-008;Female;Cannot read and write;Active;Yes;65,1;24;No smoker;Controlled
+EGY-013-009;Female;Cannot read and write;Active;Yes;48,6;35,3;No smoker;Controlled
+EGY-013-010;Female;Cannot read and write;Active;Yes;45,1;31,4;No smoker;Controlled
+EGY-014-001;Female;Primary;Active;No;57,9;39,5;No smoker;Controlled
+EGY-014-002;Male;Secondary school;Active;No;33,1;25,8;No smoker;Uncontrolled
+EGY-014-003;Male;Secondary school;Active;Yes;36,5;32,8;Active smoker;Uncontrolled
+EGY-014-004;Male;Primary;Active;Yes;24,2;22,1;No smoker;Partly controlled
+EGY-014-005;Female;Primary;Active;Yes;38,1;27;No smoker;Uncontrolled
+EGY-014-006;Female;Primary;Non-active;No;60,1;36,3;No smoker;Partly controlled
+EGY-014-007;Female;University degree;Active;No;32,2;43,1;No smoker;Uncontrolled
+EGY-014-008;Female;Higher education;Active;Yes;24,6;22,4;No smoker;Partly controlled
+EGY-014-009;Male;Secondary school;Active;No;42,1;29,9;Past smoker;Controlled
+EGY-014-010;Female;University degree;Active;Yes;35,1;20,4;No smoker;Controlled
+EGY-014-012;Female;University degree;Active;Yes;23,6;26,5;No smoker;Partly controlled
+EGY-014-013;Female;University degree;Active;Yes;20,2;20,9;No smoker;Uncontrolled
+EGY-014-014;Male;University degree;Active;Yes;25,5;26,1;No smoker;Controlled
+EGY-014-015;Male;Cannot read and write;Active;Yes;51,8;28,1;Active smoker;Uncontrolled
+EGY-014-016;Male;University degree;Active;Yes;25,3;24,3;No smoker;Uncontrolled
+EGY-014-017;Female;University degree;Active;Yes;48,2;23,8;No smoker;Controlled
+EGY-014-018;Female;Primary;Non-active;Yes;52;32;No smoker;Controlled
+EGY-014-019;Male;Secondary school;Active;Yes;63,4;26,5;No smoker;Uncontrolled
+EGY-014-020;Male;University degree;Active;Yes;22,8;28,1;No smoker;Controlled
+EGY-015-001;Male;Secondary school;Active;Yes;25,3;27,8;Active smoker;Uncontrolled
+EGY-015-003;Male;Primary;Active;No;30,3;26,4;Active smoker;Uncontrolled
+EGY-015-004;Male;University degree;Active;No;32,1;27,9;Active smoker;Controlled
+EGY-015-005;Male;Secondary school;Active;Yes;30,1;28,1;Active smoker;Uncontrolled
+EGY-015-006;Female;University degree;Active;Yes;33,1;26,5;Active smoker;Uncontrolled
+EGY-015-007;Female;Secondary school;Active;No;33;22,6;Active smoker;Uncontrolled
+EGY-015-008;Male;Secondary school;Active;No;40,2;25,8;No smoker;Uncontrolled
+EGY-015-009;Female;University degree;Active;No;35,1;23;No smoker;Uncontrolled
+EGY-015-010;Female;Secondary school;Active;Yes;40,2;23,5;Active smoker;Uncontrolled
+EGY-016-001;Male;University degree;Active;No;70,7;31;No smoker;Uncontrolled
