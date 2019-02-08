@@ -10,8 +10,10 @@ library(tidyr)
 library(dplyr)
 library(formattable)
 library(htmltools)
-library(sparkline)
-library(htmlwidgets)
+
+# mis en commentaires le 8/2/2019 pour suppression sparklines
+#library(sparkline)
+#library(htmlwidgets)
 
 
 #################################################

@@ -41,15 +41,15 @@ shinyUI(navbarPage(
     # Description des variables
     tabPanel(
         "Variables",
-        tabsetPanel(
-            tabPanel(
-                "Existantes",
-                # dataTableOutput("variables"),
-                htmlOutput("variables2"),
-                style = "overflow: scroll;"
+        # Modification faite le 8/2/2019
+        fluidRow(
+            column(
+                width = 6,
+                h2("Existantes"),
+                dataTableOutput("variables")
             ),
-            tabPanel(
-                "Nouvelles ordinales",
+            column(
+                width = 6,
                 sidebarLayout(
                     sidebarPanel(
                         actionButton("nouvord.ajout", "Ajout d'une nouvelle variable"),
@@ -66,12 +66,40 @@ shinyUI(navbarPage(
                         tags$div(id = "nouvord")
                     )
                 )
-            ),
-            tabPanel(
-                "Nouvelles qualitatives",
-                helpText("En cours de développement")
             )
         )
+        # Mis en commentaires le 8/2/2019 pour modification présentation et suppression sparklines
+        # tabsetPanel(
+        #     tabPanel(
+        #         "Existantes",
+        #         # dataTableOutput("variables"),
+        #         htmlOutput("variables2"),
+        #         style = "overflow: scroll;"
+        #     ),
+        #     tabPanel(
+        #         "Nouvelles ordinales",
+        #         sidebarLayout(
+        #             sidebarPanel(
+        #                 actionButton("nouvord.ajout", "Ajout d'une nouvelle variable"),
+        #                 helpText(
+        #                     p("Le découpage d'une variable peut se faire de deux façon :"),
+        #                     tags$ul(
+        #                         tags$li("un entier : nombre d'intervalles (qui seront donc de même taille"),
+        #                         tags$li("une liste de valeurs (séparées par des ',') : valeurs limites des intervalles")
+        #                     )
+        #                 )
+        #             ),
+        #             mainPanel(
+        #                 uiOutput("nouvord.ui"),
+        #                 tags$div(id = "nouvord")
+        #             )
+        #         )
+        #     ),
+        #     tabPanel(
+        #         "Nouvelles qualitatives",
+        #         helpText("En cours de développement")
+        #     )
+        # )
     ),
 
     #############################################

@@ -218,11 +218,12 @@ shinyServer(function(input, output, session) {
         res
     }, options = opt.DT.simple)
     
-    output$variables2 <- renderUI({
-        don = donnees()
-        if (is.null(don)) return(NULL)
-        drawRepresentation(don)
-    })
+    # Mis en commentaires le 8/2/2019 pour suppression sparklines
+    # output$variables2 <- renderUI({
+    #     don = donnees()
+    #     if (is.null(don)) return(NULL)
+    #     drawRepresentation(don)
+    # })
 
     #############################################
     # Sous-populations
