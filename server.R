@@ -103,9 +103,9 @@ shinyServer(function(input, output, session) {
             nom.quanti = names(don)[unlist(lapply(don, is.numeric))]
             if (length(nom.quanti) > 0) {
                 insertUI(
-                    paste0("#nouvord"),
-                    "beforeEnd",
-                    list(
+                    selector = "#nouvord",
+                    where = "beforeEnd",
+                    ui = list(
                         fluidRow(
                             id = paste0("nouvord", e),
                             column(width = 3, textInput(paste0("nouvord", e, ".nom"), "Nom de la variable", paste0("nouvelle", e), placeholder = "donner le nom de la nouvelle variable")),
@@ -118,11 +118,12 @@ shinyServer(function(input, output, session) {
                         )
                     )
                 )
-            
+                
                 output[[paste0("nouvord", e, ".tab")]] <- renderTable({
                     don = donneesAug.ord()
                     table(don[,input[[paste0("nouvord", e, ".nom")]]], useNA = "ifany")
                 })
+
                 output[[paste0("nouvord", e, ".bar")]] <- renderPlot({
                     don = donneesAug.ord()
                     barplot(table(don[,input[[paste0("nouvord", e, ".nom")]]], useNA = "ifany"))
@@ -134,8 +135,11 @@ shinyServer(function(input, output, session) {
     donneesAug.ord <- reactive({
         don = donnees.originales()
         
-        vars = sub(".var", "", names(input)[grep("nouvord[0-9]+.var", names(input))])
-        
+        # Modification pour ajout nouvelles variables suite à upgrade d'un package
+        noms = names(input)
+        noms = noms[grep("-selectized", noms, invert = TRUE)]
+        vars = sub(".var", "", noms[grep("nouvord[0-9]+.var", noms)])
+
         if (length(vars) == 0) { return (don) }
         
         for (v in vars) {
